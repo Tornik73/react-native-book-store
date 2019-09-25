@@ -6,7 +6,7 @@ class SettingsScreen extends Component<any, any> {
   render() {
     return (
       <View style={styles.container}>
-        <Text>This is the NameScreen.</Text>
+        <Text>This is the Setting.</Text>
       </View>
     );
   }

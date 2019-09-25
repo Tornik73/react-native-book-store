@@ -8,7 +8,6 @@ import { View, Text } from 'react-native';
 
 interface Props {};
 interface State {};
-
 class Navigation extends Component<Props, State> {
 
     render() {
