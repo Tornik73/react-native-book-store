@@ -2,15 +2,15 @@ import styles from './styles';
 import React, { Component } from 'react';
 import { View, Text, FlatList, SafeAreaView, ActivityIndicator } from 'react-native';
 import { AuthorsBooks } from '../../models/authorBook.model'
-import { Book } from '../../models';
+// import { Book } from '../../models';
 
-interface Props {}
-interface State { 
-  data: AuthorsBooks[];
-  isLoading: boolean;
-}
-class HomeScreen extends Component<Props, State> {
-  constructor(props){
+// interface Props {}
+// interface State { 
+//   data: AuthorsBooks[];
+//   isLoading: boolean;
+// }
+class HomeScreen extends Component<any, any> {
+  constructor(props: any){
     super(props);
     this.state = {
       data: null,
@@ -26,7 +26,7 @@ class HomeScreen extends Component<Props, State> {
     .then((response: Response) => response.json())
     .then((responseJson: AuthorsBooks[]) => {
 
-       this.setState((): State => ({
+       this.setState((): any => ({
           data: responseJson,
           isLoading: true
        }));
