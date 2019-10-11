@@ -11,9 +11,14 @@
     "uninstall-from-device": "adb uninstall com.bsStore"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.6.2",
+    "@types/jwt-decode": "^2.2.1",
     "@types/react-redux": "^7.1.4",
+    "@types/redux-saga": "^0.10.5",
+    "axios": "^0.19.0",
     "babel-preset-expo": "^7.0.0",
     "expo-constants": "^7.0.0",
+    "jwt-decode": "^2.2.0",
     "native-base": "^2.2.1",
     "react": "16.9.0",
     "react-native": "0.61.1",
@@ -28,6 +33,7 @@
     "react-redux": "^7.1.1",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
+    "redux-saga": "^1.1.1",
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {

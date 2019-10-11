@@ -1,10 +1,10 @@
 import { combineReducers, createStore } from "redux";
-import venueReducer from './venue.reducer';
+import homeReducer from './home.reducer';
 import authReducer from './auth.reducer'
 
 
 export const reducers = combineReducers({
-    venueReducer,
+    homeReducer,
     authReducer
 });
 

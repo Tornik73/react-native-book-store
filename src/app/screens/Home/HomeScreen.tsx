@@ -1,7 +1,7 @@
 import styles from './styles';
 import React, { Component } from 'react';
 import { View, Text, FlatList, SafeAreaView, ActivityIndicator } from 'react-native';
-import { AuthorsBooks } from '../../models/authorBook.model'
+import { AuthorsBooks } from '../../shared/model/authorBook.model'
 // import { Book } from '../../models';
 
 // interface Props {}

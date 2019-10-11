@@ -7,21 +7,9 @@ import HomeScreen from './src/app/screens/Home/HomeScreen';
 import { View } from 'react-native';
 import store from './src/app/redux/config-store';
 import { FooterItemsEnum } from './src/app/shared/enums/footer-items.enum';
-import FooterComponent from './src/app/screens/Footer/FooterScreen';
+import FooterComponent from './src/app/components/home/footer/FooterScreen';
 import LoginScreen from './src/app/screens/Login/LoginScreen';
-
-// const DiscoverStack = createStackNavigator({
-//   Home: HomeScreen,
-//   // AllNewVenues: AllNewVenues,
-//   // Featured: Featured,
-//   // TopRated: TopRated,
-//   // VenuePage:  VenueProfilePage,
-//   // CreateVenue: CreateVenue,
-// }, {
-//   defaultNavigationOptions: {
-//     header: (props) => <HomeScreen {...props}/>
-//   }
-// });
+import ProfileScreen from './src/app/screens/Profile/Profile.screen';
 
 export class EmptyScreen extends Component{
   render(){
@@ -32,6 +20,7 @@ export class EmptyScreen extends Component{
 const TopLevelNavigation = createAppContainer(
   createBottomTabNavigator({
     Home: { screen: HomeScreen, navigationOptions: () => ({ title: FooterItemsEnum.HOME, tabBarTestID: FooterItemsEnum.HOME }) },
+    Profile: {screen: ProfileScreen, navigationOptions: () => ({ title: FooterItemsEnum.PROFILE, tabBarTestID: FooterItemsEnum.PROFILE })},
     Login: { screen: LoginScreen, navigationOptions: () => ({ title: FooterItemsEnum.LOGIN, tabBarTestID: FooterItemsEnum.LOGIN})},
   }, {
     tabBarComponent: props => <FooterComponent {...props} />,
@@ -45,7 +34,7 @@ export default class App extends Component{
     return (
       <Provider store={mainStore}>
           <TopLevelNavigation />
-      </Provider>
+      </Provider> 
     )
   }
 }

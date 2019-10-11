@@ -5,7 +5,7 @@ export const environment =  {
         loginToken: '19527b8662639167585436bb8f5449e442c53ab5decd59170607c1dc3898e479',
         longitude: 122.1231,
         latitude:-6.413143,
-        login: 'sergio2@tester.test',
-        password: 'password'
+        login: 'c',
+        password: 'Upiterh123'
     }
 }

@@ -1,4 +1,4 @@
-// import { Colors } from "../../../shared/helpers/colors";
+import { Colors } from "../../../shared/helpers/colors";
 
 import { StyleSheet } from 'react-native';
 
@@ -10,7 +10,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginTop: 'auto',
-        backgroundColor: 'white'
+        backgroundColor: Colors.white
     },
     item: {
         flex: 1,
@@ -31,13 +31,13 @@ export default StyleSheet.create({
         fontSize: 12,
         paddingTop: 7,
         paddingBottom: 7,
-        // color: Colors.footerTextColor
+        color: Colors.footerTextColor
     },
     itemTitleSelected: {
-        // color: Colors.slate
+        color: Colors.slate
     },
     selectedSeparator: {
-        // backgroundColor: Colors.slate,
+        backgroundColor: Colors.slate,
         width: '70%',
         height: 4,
         borderRadius: 30,
