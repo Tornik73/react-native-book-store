@@ -12,8 +12,8 @@ const jwt = require('jwt-decode');
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   login: () => void,
+  token: string, 
   isLogined: boolean,
-  token: string,
 }
 interface State {
   username: string;
@@ -32,22 +32,23 @@ class LoginScreen extends Component<Props, State> {
   
   isLoad = () => this.props.isLogined; 
 
-  public async onLogin() {
+  public onLogin() {
     // const { username, password } = this.state;
       this.props.login();
-      try {
-        const token = await AsyncStorage.getItem('token');
-        setTimeout(()=>{
-          if (token !== null) {
-            const userData = jwt(token);
-            console.log(userData);
-            this.props.navigation.navigate('Home');
-          }
-        }, 2000)
-      }
-      catch (error) {
-        console.error(error);
-      }
+        try {
+          setTimeout(async ()=> {
+            const token = await AsyncStorage.getItem('token');
+            if (token !== null) {
+              const userData = jwt(token);
+
+              this.props.navigation.navigate('Home');
+            }
+  
+          }, 2000)
+        }
+        catch (error) {
+          console.error(error);
+       }
   }
   render() {
 
@@ -56,7 +57,7 @@ class LoginScreen extends Component<Props, State> {
         {
           (this.isLoad()) ? 
           <ActivityIndicator size="large" color={'black'}></ActivityIndicator> :
-            <View >
+            <View>
               <TextInput
                 value={this.state.username}
                 onChangeText={(username) => this.setState({ username })}
@@ -89,7 +90,6 @@ const mapDispatchToProps = (dispatch: any) => ({
 const mapStateToProps = (state: any) => {
   return {
       isLogined: state.authReducer.isLogined,
-      token: state.authReducer.token
   }
 };
 

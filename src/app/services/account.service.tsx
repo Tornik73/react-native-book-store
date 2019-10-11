@@ -10,8 +10,8 @@ export const AccountService = {
         AsyncStorage.setItem('token', response.data.token);
         return response;
     },
-    logout: async (): Promise<any> => {
-        const response = await AsyncStorage.clear();
+    logout: (): Promise<any> => {
+        const response = AsyncStorage.clear();
         return response;
     }
 };

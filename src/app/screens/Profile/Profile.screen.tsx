@@ -6,6 +6,8 @@ import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-n
 import AsyncStorage from '@react-native-community/async-storage';
 import * as loginActions from "../../redux/actions";
 
+const jwt = require('jwt-decode');
+
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   logout: () => void;
@@ -17,7 +19,10 @@ interface State {
 }
 
 class ProfileScreen extends Component<Props, State> {
-  
+  userData = {
+    email: '',
+    name: ''
+  }
   constructor(props: Props) {
     super(props);
     this.state = { 
@@ -28,14 +33,19 @@ class ProfileScreen extends Component<Props, State> {
 
   public logOut(): void {
     this.props.logout();
-    this.props.navigation.navigate('home');
+  }
+
+  async componentDidMount() {
+    const user = jwt(await AsyncStorage.getItem('token'));
+
+    this.userData.name = user.email;
   }
 
   render() {
    
     return (
       <View style={styles.container}>
-        <Text>This is the NameScreen.</Text>
+        <Text>Hello: {this.userData.name}</Text>
         <Button
                 title={'LogOut'} 
                 onPress={() => this.logOut()}
@@ -45,9 +55,9 @@ class ProfileScreen extends Component<Props, State> {
   }
 }
 
-// const mapDispatchToProps = (dispatch: any) => ({
-//   logout: () => dispatch(loginActions()),
-// });
+const mapDispatchToProps = (dispatch: any) => ({
+  logout: () => dispatch(loginActions.logout()),
+});
 
 const mapStateToProps = (state: any) => {
   return {
@@ -58,5 +68,5 @@ const mapStateToProps = (state: any) => {
 
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(ProfileScreen)

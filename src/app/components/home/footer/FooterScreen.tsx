@@ -2,16 +2,24 @@ import { Component } from "react";
 import React from "react";
 import { View, Image, Text, TouchableOpacity } from "react-native";
 import { FooterItemsEnum } from "../../../shared/enums/footer-items.enum";
-import { MenuItemModel } from "../../models/menu-item.model";
 import style from "./style"; 
+import { connect } from "react-redux";
+import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation";
+import { MenuItemModel } from "src/app/shared/model/menu-item.model";
 
 const menu: Array<MenuItemModel> = [
     { name: FooterItemsEnum.HOME , img: require('../../../../assets/img/png/home.png')},
-    { name: FooterItemsEnum.LOGIN , img: require('../../../../assets/img/png/login.png')},
     { name: FooterItemsEnum.PROFILE , img: require('../../../../assets/img/png/person.png')},
 ]
 
-export default class FooterComponent extends Component<any, any>{
+
+interface Props {
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+    token: string, 
+    isLogined: boolean,
+}
+
+class FooterComponent extends Component<Props, any>{
 
     
     render() {
@@ -23,23 +31,39 @@ export default class FooterComponent extends Component<any, any>{
     }
   
     getMenuView(item: MenuItemModel){
-        const {navigation} = this.props as any; 
-        if(navigation.isFocused(item.name)){
+        const {navigation} = this.props as any;
+        if (this.props.isLogined){
+            if(navigation.isFocused(item.name)){
+                return (
+                <View style={style.item}>
+                    <Image style={style.itemImage} source={item.img}></Image>
+                    <Text style={[style.itemTitle, style.itemTitleSelected]}>{item.name}</Text>
+                    <View style={style.selectedSeparator}></View>
+                </View>)
+            }
             return (
-            <View style={style.item}>
-                <Image style={style.itemImage} source={item.img}></Image>
-                <Text style={[style.itemTitle, style.itemTitleSelected]}>{item.name}</Text>
-                <View style={style.selectedSeparator}></View>
-            </View>)
+                <TouchableOpacity onPress={async() => { 
+                    navigation.navigate(item.name);
+                    }} style={style.item}>
+                    <Image style={style.itemImage} source={item.img}></Image>
+                    <Text style={[style.itemTitle]}>{item.name}</Text>
+                    <View style={[style.selectedSeparator, style.notVisible]}></View>
+                </TouchableOpacity>)
+        } else {
+            this.props.navigation.navigate('Login');
         }
-        return (
-            <TouchableOpacity onPress={async() => { 
-                navigation.navigate(item.name);
-                }} style={style.item}>
-                <Image style={style.itemImage} source={item.img}></Image>
-                <Text style={[style.itemTitle]}>{item.name}</Text>
-                <View style={[style.selectedSeparator, style.notVisible]}></View>
-            </TouchableOpacity>)
     }
 
 }
+
+  
+  const mapStateToProps = (state: any) => {
+    return {
+        isLogined: state.authReducer.isLogined,
+    }
+  };
+  
+export default connect(
+    mapStateToProps,
+    null
+)(FooterComponent)

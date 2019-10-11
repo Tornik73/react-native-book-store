@@ -1,6 +1,6 @@
 import styles from './styles';
 import React, { Component } from 'react';
-import { Text, View } from '../../navigation/node_modules/react-native';
+import { Text, View } from 'react-native';
 
 class OptionsScreen extends Component {
   render() {
