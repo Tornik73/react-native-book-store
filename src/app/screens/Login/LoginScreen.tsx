@@ -40,10 +40,8 @@ class LoginScreen extends Component<Props, State> {
             const token = await AsyncStorage.getItem('token');
             if (token !== null) {
               const userData = jwt(token);
-
               this.props.navigation.navigate('Home');
             }
-  
           }, 2000)
         }
         catch (error) {

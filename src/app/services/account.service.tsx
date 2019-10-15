@@ -4,10 +4,11 @@ import { environment } from "../environments/environment";
 import AsyncStorage from "@react-native-community/async-storage";
 
 export const AccountService = {
-    login: async (login: string, password: string): Promise<any> => {
-        let response = await Axios.post<any>(`${environment.apiUrl}authenticate/`, {email: login, password: password})
-                        .then(response => response);
-        AsyncStorage.setItem('token', response.data.token);
+    login: async (login: string, password: string): Promise<LoginModel> => {
+        const response = await Axios.post<LoginModel>(`${environment.apiUrl}authenticate/`, {email: login, password: password})
+                        .then(response => response.data);
+        AsyncStorage.setItem('token', response.token);
+        AsyncStorage.setItem('img', response.img);
         return response;
     },
     logout: (): Promise<any> => {

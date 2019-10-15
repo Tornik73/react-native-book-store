@@ -1,10 +1,12 @@
 import styles from './styles';
 import React, { Component } from 'react';
-import { Text, View, Button } from 'react-native';
+import { Text, View, Image, TouchableOpacity, ImageSourcePropType } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as loginActions from "../../redux/actions";
+import { UserModel } from 'src/app/shared/model';
+import { environment } from '../../environments/environment';
 
 const jwt = require('jwt-decode');
 
@@ -14,20 +16,32 @@ interface Props {
   isLogined: boolean,
 }
 interface State {
-  username: string;
-  password: string;
+  user: UserModel;
+  file: string;
+  imageBase64: string | any; // TODO: Remove any
+  editMode: boolean
 }
 
 class ProfileScreen extends Component<Props, State> {
-  userData = {
-    email: '',
-    name: ''
-  }
   constructor(props: Props) {
     super(props);
     this.state = { 
-      username: '',
-      password: '',
+      user: {
+        id: null,
+        email: '',
+        name: '',
+        lastname: '',
+        username: '',
+        telephone: '',
+        age: null,
+        country: '',
+        gender: '',
+        img: environment.defaultImg,
+        isAdmin: false,
+      },
+      file: '',
+      imageBase64: environment.defaultImg,
+      editMode: false
     };
   }
 
@@ -35,21 +49,50 @@ class ProfileScreen extends Component<Props, State> {
     this.props.logout();
   }
 
-  async componentDidMount() {
-    const user = jwt(await AsyncStorage.getItem('token'));
+  public async initUserState(){
+    const userFromStorage: UserModel = jwt(await AsyncStorage.getItem('token'));
+    console.log(userFromStorage);
+    const img = await AsyncStorage.getItem('img');
+    this.setState({
+      user: {
+        id: userFromStorage.id,
+        email: userFromStorage.email,
+        name: userFromStorage.name,
+        lastname: userFromStorage.lastname,
+        username: userFromStorage.username,
+        telephone: userFromStorage.telephone,
+        age: userFromStorage.age,
+        country: userFromStorage.country,
+        gender: userFromStorage.gender,
+        img: environment.defaultImg,
+        isAdmin: userFromStorage.isAdmin,
+      },
+      imageBase64: img
+    });
+  }
 
-    this.userData.name = user.email;
+  public componentDidMount() {
+    this.initUserState();
   }
 
   render() {
    
     return (
-      <View style={styles.container}>
-        <Text>Hello: {this.userData.name}</Text>
-        <Button
-                title={'LogOut'} 
-                onPress={() => this.logOut()}
-              />
+      <View>
+        <View>
+          <Image style={styles.avatar} source={{uri: this.state.imageBase64}}/>
+        </View>
+          <View>
+            <View style={styles.bodyContent}>
+              <Text style={styles.name}>{this.state.user.username}</Text>
+              <Text style={styles.info}>{this.state.user.name} {this.state.user.lastname} / {this.state.user.country} </Text>
+              <Text style={styles.description}>Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum electram expetendis, omittam deseruisse consequuntur ius an,</Text>
+                
+              <TouchableOpacity style={styles.buttonContainer} onPress={() => this.logOut()}>
+                <Text>Log out</Text>  
+              </TouchableOpacity>              
+          </View>
+        </View>
       </View>
     );
   }

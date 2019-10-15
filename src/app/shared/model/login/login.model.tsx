@@ -1,3 +1,4 @@
 export interface LoginModel{
-    loginToken: string;
+    token: string;
+    img: string;
 }
