@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { LoginModel } from "../shared/model/login/login.model";
+import { LoginModel } from "../shared/model/login.model";
 import { environment } from "../environments/environment";
 import AsyncStorage from "@react-native-community/async-storage";
 import { UserModel } from "../shared/model";

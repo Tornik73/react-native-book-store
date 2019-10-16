@@ -37,7 +37,7 @@ class HomeScreen extends Component<any, any> {
     });
   }
 
-  private Item = ({ bookItem }): JSX.Element => {
+  private Item = ({ bookItem }:any): JSX.Element => {
     return (
       <View style={styles.item}>
         <Text style={styles.title}>{bookItem.title}</Text>

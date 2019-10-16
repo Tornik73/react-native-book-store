@@ -1,7 +1,9 @@
 import { AuthActionEnum, UserActionsEnum } from '../../shared/enums/';
+import { ProfileReducerState } from 'src/app/shared/model';
 
-const INIT_STATE = {
-    profileImg: ''
+const INIT_STATE: ProfileReducerState = {
+    profileImg: '',
+    response: null,
 }
 
 export default function profileReducer(state = INIT_STATE, action: any) {

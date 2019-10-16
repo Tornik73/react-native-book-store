@@ -6,22 +6,26 @@ import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-n
 import AsyncStorage from '@react-native-community/async-storage';
 import * as loginActions from "../../redux/actions/auth.actions";
 import * as profileActions from "../../redux/actions/profile.actions";
-import { UserModel } from 'src/app/shared/model';
+import { UserModel, AuthReducerState, ProfileReducerState } from 'src/app/shared/model';
 import { environment } from '../../environments/environment';
 import ImagePicker from 'react-native-image-picker';
+
 const jwt = require('jwt-decode');
 const RNGRP = require('react-native-get-real-path');
 const RNFS = require('react-native-fs');
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+
   logout: () => void;
   putRequest: (user: UserModel) => void;
   profileImageChange: (img: string) => void;
+
   isLogined: boolean;
   responseUserData: UserModel;
   profileImg: string;
 }
+
 interface State {
   user: UserModel;
   previosProfileImage: string;
@@ -29,7 +33,14 @@ interface State {
   editMode: boolean
 }
 
+interface mapStateToPropsModel {
+  authReducer: AuthReducerState;
+  profileReducer: ProfileReducerState;
+}
+
+
 class ProfileScreen extends Component<Props, State> {
+  
   constructor(props: Props) {
     super(props);
     this.state = { 
@@ -52,63 +63,8 @@ class ProfileScreen extends Component<Props, State> {
     };
   }
 
-  public logOut(): void {
-    this.props.logout();
-  }
-
-  public handleChoosePhoto = (): void => {
-    const options = {
-      noData: true
-    };
-
-    this.setState({
-      previosProfileImage: this.state.profileImage
-    })
-
-    ImagePicker.launchImageLibrary(options, response => {
-      if (response.uri) {
-        this.setState({
-          editMode: true,
-          profileImage: response.uri 
-        })
-      }
-    });
-  }
-
-  public async saveImage (): Promise<void> {
-
-    this.setState({
-      editMode: false,
-    });
-    // console.log(this.props.profileImg);
-
-    RNGRP.getRealPathFromURI(this.state.profileImage).then((path: string) =>
-      RNFS.readFile(path, 'base64').then((imageBase64: string )=> {
-        const img = 'data:image/png;base64,' + imageBase64;
-        this.props.profileImageChange(img);
-        this.setState({
-          user: {
-            ...this.state.user,
-            img: img
-          }
-        })
-      }
-      ).then(() => {
-        this.props.putRequest(this.state.user);
-      })
-    )
-
-
-
-  }
-
-  public cancelSavingImage (): void {
-
-    this.setState({
-      editMode: false,
-      profileImage: this.state.previosProfileImage
-    })
-
+  public componentDidMount(): void {
+    this.initUserState();
   }
 
   public async initUserState(): Promise<void> {
@@ -136,10 +92,62 @@ class ProfileScreen extends Component<Props, State> {
     });
   }
 
-  public componentDidMount() {
-    this.initUserState();
+  public async saveImage (): Promise<void> {
+
+    this.setState({
+      editMode: false,
+    });
+    // console.log(this.props.profileImg);
+
+    RNGRP.getRealPathFromURI(this.state.profileImage).then((path: string) =>
+      RNFS.readFile(path, 'base64').then((imageBase64: string )=> {
+        const img = 'data:image/png;base64,' + imageBase64;
+        this.props.profileImageChange(img);
+        this.setState({
+          user: {
+            ...this.state.user,
+            img: img
+          }
+        })
+      }
+      ).then(() => {
+        this.props.putRequest(this.state.user);
+      })
+    )
   }
 
+  public cancelSavingImage (): void {
+
+    this.setState({
+      editMode: false,
+      profileImage: this.state.previosProfileImage
+    })
+
+  }
+
+  public handleChoosePhoto = (): void => {
+    const options = {
+      noData: true
+    };
+
+    this.setState({
+      previosProfileImage: this.state.profileImage
+    })
+
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.uri) {
+        this.setState({
+          editMode: true,
+          profileImage: response.uri 
+        })
+      }
+    });
+  }
+
+  public logOut(): void {
+    this.props.logout();
+  }
+ 
   render() {
    const { user, profileImage } = this.state;
     return (
@@ -189,10 +197,9 @@ const mapDispatchToProps = (dispatch: any) => ({
   profileImageChange: (img: string) => dispatch(profileActions.updateProfileImage(img))
 });
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: mapStateToPropsModel ) => {
   return {
       isLogined: state.authReducer.isLogined,
-      token: state.authReducer.token,
       responseUserData: state.profileReducer.response,
       profileImg: state.profileReducer.profileImg
   }

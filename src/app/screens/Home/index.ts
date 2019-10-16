@@ -1,3 +1,3 @@
-import DetailScreen from "./HomeScreen";
+import HomeScreen from "./HomeScreen";
 
-export default DetailScreen;
+export default HomeScreen;

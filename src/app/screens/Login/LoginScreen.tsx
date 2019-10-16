@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Text, View, Button, TextInput, ActivityIndicator } from 'react-native';
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation";
-
 import styles from './styles';
 import * as loginActions from "../../redux/actions/auth.actions";
 import * as profileActions from '../../redux/actions/profile.actions';
 import AsyncStorage from '@react-native-community/async-storage';
-
-const jwt = require('jwt-decode');
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -61,6 +58,7 @@ class LoginScreen extends Component<Props, State> {
         console.error(error);
       }
   }
+  
   render() {
 
     return (

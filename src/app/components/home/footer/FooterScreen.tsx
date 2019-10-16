@@ -5,7 +5,7 @@ import { FooterItemsEnum } from "../../../shared/enums/footer-items.enum";
 import style from "./style"; 
 import { connect } from "react-redux";
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation";
-import { MenuItemModel } from "src/app/shared/model/menu-item.model";
+import { MenuItemModel } from "../../../shared/model/";
 import * as loginActions from "../../../redux/actions/auth.actions";
 
 interface Props {

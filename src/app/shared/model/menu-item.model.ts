@@ -1,4 +1,4 @@
-import { FooterItemsEnum } from '../shared/enums/footer-items.enum';
+import { FooterItemsEnum } from '../enums';
 
 export interface MenuItemModel{
     name: FooterItemsEnum;
