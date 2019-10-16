@@ -4,7 +4,8 @@ import { Text, View, Button, TextInput, ActivityIndicator } from 'react-native';
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation";
 
 import styles from './styles';
-import * as loginActions from "../../redux/actions/";
+import * as loginActions from "../../redux/actions/auth.actions";
+import * as profileActions from '../../redux/actions/profile.actions';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const jwt = require('jwt-decode');
@@ -12,6 +13,7 @@ const jwt = require('jwt-decode');
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   login: () => void,
+  changeFooterImage: (img: string) => void,
   token: string, 
   isLogined: boolean,
 }
@@ -38,8 +40,10 @@ class LoginScreen extends Component<Props, State> {
         try {
           setTimeout(async ()=> {
             const token = await AsyncStorage.getItem('token');
-            if (token !== null) {
+            const img = await AsyncStorage.getItem('img');
+            if (token !== null && img !== null) {
               const userData = jwt(token);
+              this.props.changeFooterImage(img);
               this.props.navigation.navigate('Home');
             }
           }, 2000)
@@ -83,11 +87,13 @@ class LoginScreen extends Component<Props, State> {
 
 const mapDispatchToProps = (dispatch: any) => ({
   login: () => dispatch(loginActions.login()),
+  changeFooterImage: (img: string) => dispatch(profileActions.updateProfileImage(img))
 });
 
 const mapStateToProps = (state: any) => {
   return {
       isLogined: state.authReducer.isLogined,
+      img: state.profileReducer.profileImg
   }
 };
 

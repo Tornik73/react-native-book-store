@@ -8,6 +8,6 @@ export interface UserModel {
     age: number | null;
     country: string;
     gender: string;
-    img: string;
     isAdmin: boolean;
+    img: string | null;
 }

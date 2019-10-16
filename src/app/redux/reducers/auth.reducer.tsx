@@ -1,11 +1,10 @@
 import { AuthActionEnum } from '../../shared/enums/'
 
 const INIT_STATE = {
-    isLogined: false
+    isLogined: false,
 }
 
 export default function authReducer(state = INIT_STATE, action: any) {
-    console.log(action.type);
     switch (action.type) {
         case AuthActionEnum.LOGIN_SUCCESS:
             return {

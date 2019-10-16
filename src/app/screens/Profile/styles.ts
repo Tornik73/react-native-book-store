@@ -48,6 +48,17 @@ const styles = StyleSheet.create({
     borderRadius:30,
     backgroundColor: "#00BFFF",
   },
+  choosePhoto: {
+    marginTop:10,
+    height:45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius:30,
+  },
+  saveButton: {
+    marginRight: 10,
+  }
 });
 
 export default styles;

@@ -1,18 +1,19 @@
 import { AccountService } from "../../services/account.service"
 import { environment } from "../../environments/environment"
-import { AuthActionEnum } from "../../shared/enums/"
+import { AuthActionEnum, UserActionsEnum } from "../../shared/enums/"
 
 export function login() {
     return async (dispatch: any) => {
         await AccountService.
             login(environment.hardcodeData.login, environment.hardcodeData.password).
-            then((response) => dispatch(loginSuccess())).
+            then((response) => dispatch(loginSuccess(response.img))).
             catch((err) => console.log(err));
     }
 }
 
-export function loginSuccess() {
+export function loginSuccess(img: string) {
     return {
+        img: img,
         type: AuthActionEnum.LOGIN_SUCCESS,
     }
 }
@@ -20,12 +21,18 @@ export function loginSuccess() {
 export function logout() {
     return async (dispatch: any) => {
         await AccountService.
-            logout().
-            then(() => dispatch(logoutSuccess())).
-            catch((err) => console.log(err))
+            logout()
+            .then(() => dispatch(logoutSuccess()))
+            .then(() => dispatch(profileClearImage()))
+            .catch((err:any) => console.log(err))
     }
 }
 
+export function profileClearImage() {
+    return {
+        type: UserActionsEnum.PROFILE_LOGOUT_CLEAR_IMAGE
+    }
+}
 export function logoutSuccess() {
     return {
         type: AuthActionEnum.LOGOUT

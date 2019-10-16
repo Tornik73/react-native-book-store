@@ -24,7 +24,9 @@ export default StyleSheet.create({
         paddingTop: 15,
     },
     itemImage: {
-        height: 20,
+        borderRadius: 50,
+        height: 25,
+        width: 25,
         resizeMode: 'contain'
     },
     itemTitle: {
