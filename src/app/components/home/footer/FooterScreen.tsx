@@ -6,12 +6,14 @@ import style from "./style";
 import { connect } from "react-redux";
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation";
 import { MenuItemModel } from "src/app/shared/model/menu-item.model";
+import * as loginActions from "../../../redux/actions/auth.actions";
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
     token: string, 
     isLogined: boolean,
     profileImg: string,
+    isLoading: boolean,
 }
 interface State {
     menu: MenuItemModel[];
@@ -38,7 +40,7 @@ class FooterComponent extends Component<Props, State>{
   
     getMenuView(item: MenuItemModel){
         const {navigation} = this.props as any;
-        if (this.props.isLogined){
+        if (this.props.isLogined && !this.props.isLoading){
             if(navigation.isFocused(item.name)){
                 if(item.name === FooterItemsEnum.PROFILE){
                     return (
@@ -82,13 +84,14 @@ class FooterComponent extends Component<Props, State>{
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-
+    loadingStart: () => dispatch(loginActions.loadingStart())
 
 });
   const mapStateToProps = (state: any) => {
     return {
         isLogined: state.authReducer.isLogined,
-        profileImg: state.profileReducer.profileImg
+        profileImg: state.profileReducer.profileImg,
+        isLoading: state.authReducer.isLoading
     }
   };
   

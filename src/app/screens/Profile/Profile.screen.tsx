@@ -1,16 +1,17 @@
 import styles from './styles';
 import React, { Component } from 'react';
-import { Text, View, Image, TouchableOpacity, TextInput, Button, ImagePickerIOS } from 'react-native';
+import { Text, View, Image, TouchableOpacity, Button } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as loginActions from "../../redux/actions/auth.actions";
 import * as profileActions from "../../redux/actions/profile.actions";
-
 import { UserModel } from 'src/app/shared/model';
 import { environment } from '../../environments/environment';
 import ImagePicker from 'react-native-image-picker';
 const jwt = require('jwt-decode');
+const RNGRP = require('react-native-get-real-path');
+const RNFS = require('react-native-fs');
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -42,7 +43,7 @@ class ProfileScreen extends Component<Props, State> {
         age: null,
         country: '',
         gender: '',
-        img: this.props.profileImg,
+        img: '',
         isAdmin: false,
       },
       previosProfileImage: '',
@@ -74,14 +75,30 @@ class ProfileScreen extends Component<Props, State> {
     });
   }
 
-  public saveImage (): void {
+  public async saveImage (): Promise<void> {
 
     this.setState({
       editMode: false,
-    })
-    this.props.putRequest(this.state.user);
+    });
+    // console.log(this.props.profileImg);
 
-    this.props.profileImageChange(this.state.profileImage);
+    RNGRP.getRealPathFromURI(this.state.profileImage).then((path: string) =>
+      RNFS.readFile(path, 'base64').then((imageBase64: string )=> {
+        const img = 'data:image/png;base64,' + imageBase64;
+        this.props.profileImageChange(img);
+        this.setState({
+          user: {
+            ...this.state.user,
+            img: img
+          }
+        })
+      }
+      ).then(() => {
+        this.props.putRequest(this.state.user);
+      })
+    )
+
+
 
   }
 
@@ -101,8 +118,6 @@ class ProfileScreen extends Component<Props, State> {
     } else {
       userFromStorage = jwt(await AsyncStorage.getItem('token'));
     }
-    // console.log(this.props.responseUserData);
-    // const img = await AsyncStorage.getItem('img'); 
     this.setState({ 
       user: {
         id: userFromStorage.id,
@@ -115,9 +130,9 @@ class ProfileScreen extends Component<Props, State> {
         country: userFromStorage.country,
         gender: userFromStorage.gender,
         isAdmin: userFromStorage.isAdmin,
-        img: this.props.profileImg, // TODO : REMOVE
+        img: await AsyncStorage.getItem('img'), // TODO : REMOVE
       },
-      profileImage: this.props.profileImg  // TODO : REMOVE
+      profileImage: await AsyncStorage.getItem('img') // TODO : REMOVE
     });
   }
 

@@ -7,7 +7,7 @@ export function updateUser(user: UserModel) {
         await AccountService.
         putUser(user).
             then((response) => dispatch(putSuccess())).
-            catch((err) => console.log(err));
+            catch((err) => console.error(err + 'Error in PUT request'));
     }
 }
 

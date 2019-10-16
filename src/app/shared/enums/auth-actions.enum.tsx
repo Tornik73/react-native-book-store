@@ -4,4 +4,6 @@ export enum AuthActionEnum{
     SET_TOKEN = 'SET_TOKEN',
     LOGIN_FAILED = 'LOGIN_FAILED',
     LOGOUT = 'LOGOUT',
+    LOADING_START = 'LOADING_START',
+    LOADING_END = 'LOADING_END'
 }

@@ -12,11 +12,17 @@ const jwt = require('jwt-decode');
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+  
   login: () => void,
   changeFooterImage: (img: string) => void,
+  loadingStart: () => void,
+  loadingEnd: () => void,
+
   token: string, 
+  isLoad: boolean;
   isLogined: boolean,
 }
+
 interface State {
   username: string;
   password: string;
@@ -35,22 +41,25 @@ class LoginScreen extends Component<Props, State> {
   isLoad = () => this.props.isLogined; 
 
   public onLogin() {
-    // const { username, password } = this.state;
       this.props.login();
-        try {
-          setTimeout(async ()=> {
-            const token = await AsyncStorage.getItem('token');
-            const img = await AsyncStorage.getItem('img');
-            if (token !== null && img !== null) {
-              const userData = jwt(token);
-              this.props.changeFooterImage(img);
-              this.props.navigation.navigate('Home');
-            }
-          }, 2000)
-        }
-        catch (error) {
-          console.error(error);
-       }
+      this.props.loadingStart();
+
+      try {
+        setTimeout(async ()=> {
+
+          const token = await AsyncStorage.getItem('token');
+          const img = await AsyncStorage.getItem('img');
+          if (token !== null && img !== null) {
+            this.props.changeFooterImage(img);
+            this.props.loadingEnd();
+            this.props.navigation.navigate('Home');
+          }
+
+        }, 1000)
+      }
+      catch (error) {
+        console.error(error);
+      }
   }
   render() {
 
@@ -87,13 +96,15 @@ class LoginScreen extends Component<Props, State> {
 
 const mapDispatchToProps = (dispatch: any) => ({
   login: () => dispatch(loginActions.login()),
-  changeFooterImage: (img: string) => dispatch(profileActions.updateProfileImage(img))
+  changeFooterImage: (img: string) => dispatch(profileActions.updateProfileImage(img)),
+  loadingStart: () => dispatch(loginActions.loadingStart()),
+  loadingEnd: () => dispatch(loginActions.loadingEnd())
 });
 
 const mapStateToProps = (state: any) => {
   return {
       isLogined: state.authReducer.isLogined,
-      img: state.profileReducer.profileImg
+      img: state.profileReducer.profileImg,
   }
 };
 

@@ -12,24 +12,37 @@ export const AccountService = {
         AsyncStorage.setItem('img', response.img);
         return response;
     },
-    logout: (): Promise<any> => {
-        const response = AsyncStorage.clear();
-        return response;
+    getUserById: async (userID: number): Promise<UserModel> => {
+        const response = await Axios.get<UserModel>(`${environment.apiUrl}users/${userID}`)
+            .then((response) => {
+                return response.data;
+            })
+        return response;    
+    },
+    logout: async (): Promise<any> => {
+        await AsyncStorage.removeItem('token');
+        return await AsyncStorage.removeItem('img');
     },
     putUser: async (user: UserModel): Promise<UserModel> => {
-        const response = await Axios.put<UserModel>(`${environment.apiUrl}users/${user.id}`, {updatedUser: user})
-                        .then((response: any) => {
-                            const serverResponse: UserModel = response.data.data;
-                            return serverResponse;
+        const response = await Axios.put<UserModel>(`${environment.apiUrl}users/${user.id}`, {...user})
+                        .then(async (response: any) => {
+                            if(response.data.success && user.id){
+                                const serverGetResponse = await AccountService.getUserById(user.id).then((response) => response);
+                                return serverGetResponse;
+                            }
+                            return false;
                         });
-        let img: string;
-        if(response.img !== null){
-            img = response.img;
-        } else {
-            img = 'no image available';
-        }
-        AsyncStorage.setItem('currentUser', JSON.stringify(response));     
-        AsyncStorage.setItem('img', img);                
-        return response;
+        if(response){
+            let img: string;
+            if(response.img !== null){
+                img = response.img;
+            } else {
+                img = 'no image available';
+            }
+            AsyncStorage.setItem('currentUser', JSON.stringify(response));     
+            AsyncStorage.setItem('img', img);
+            return response;        
+        } 
+        throw new Error('Error in put requset service');
     }
 };
