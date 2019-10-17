@@ -1,6 +1,6 @@
 import { Author, Book } from './index';
 
-export interface AuthorsBooks {
+export interface AuthorsBooksModel {
     authorId: number;
     bookId: number;
     author: Author;

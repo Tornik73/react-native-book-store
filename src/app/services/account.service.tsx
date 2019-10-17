@@ -44,5 +44,5 @@ export const AccountService = {
             return response;        
         } 
         throw new Error('Error in put requset service');
-    }
+    },
 };

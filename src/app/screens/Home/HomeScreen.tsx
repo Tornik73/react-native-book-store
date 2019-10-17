@@ -1,40 +1,54 @@
 import styles from './styles';
 import React, { Component } from 'react';
 import { View, Text, FlatList, SafeAreaView, ActivityIndicator } from 'react-native';
-import { AuthorsBooks } from '../../shared/model/authorBook.model'
-// import { Book } from '../../models';
+import { AuthorsBooksModel } from '../../shared/model/authorBook.model';
+import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
+import { connect } from 'react-redux';
+import * as userActions from '../../redux/actions/user.actions';
+import { ProfileReducerState } from 'src/app/shared/model';
 
-// interface Props {}
-// interface State { 
-//   data: AuthorsBooks[];
-//   isLoading: boolean;
-// }
-class HomeScreen extends Component<any, any> {
-  constructor(props: any){
+interface Props {
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+  getAllBooks: () => Promise<AuthorsBooksModel>;
+  token: string;
+  isLoad: boolean;
+  isLogined: boolean;
+  bookResponseToState: AuthorsBooksModel[];
+}
+interface State { 
+  data: AuthorsBooksModel[];
+  isLoading: boolean;
+}
+interface mapStateToPropsModel {
+  profileReducer: ProfileReducerState;
+}
+
+class HomeScreen extends Component<Props, State> {
+  constructor(props: Props){
     super(props);
     this.state = {
-      data: null,
+      data: [],
       isLoading: false,
     };
   }
 
-  public componentDidMount(): void{
-    this.setState({ isLoading: false });
-    fetch('http://10.10.2.111:4010/books/', {
-       method: 'GET'
-    })
-    .then((response: Response) => response.json())
-    .then((responseJson: AuthorsBooks[]) => {
 
-       this.setState((): any => ({
-          data: responseJson,
+  public getAllBooks(): void {
+    this.setState({ isLoading: false });
+    this.props.getAllBooks().then(() => {
+        this.setState({
+          data: this.props.bookResponseToState,
           isLoading: true
-       }));
-       
-    })
+        })
+      }
+    )
     .catch((error: object) => {
-       console.error(error);
+         console.error(error);
     });
+  }
+
+  public componentDidMount(): void{
+    this.getAllBooks();
   }
 
   private Item = ({ bookItem }:any): JSX.Element => {
@@ -49,7 +63,7 @@ class HomeScreen extends Component<any, any> {
   }
 
   private renderData(): JSX.Element { 
-    const book: AuthorsBooks[] = this.state.data; //TODO: Remove this line
+    const book: AuthorsBooksModel[] = this.state.data; //TODO: Remove this line
     return( 
       <SafeAreaView>
         <FlatList
@@ -77,4 +91,17 @@ class HomeScreen extends Component<any, any> {
     }
   }
 }
-export default HomeScreen;
+const mapDispatchToProps = (dispatch: any) => ({
+  getAllBooks: () => dispatch(userActions.getAllBooks()),
+});
+
+const mapStateToProps = (state: mapStateToPropsModel) => {
+  return {
+    bookResponseToState: state.profileReducer.booksResponse
+  }
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomeScreen)

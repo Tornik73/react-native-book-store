@@ -4,6 +4,7 @@ import { ProfileReducerState } from 'src/app/shared/model';
 const INIT_STATE: ProfileReducerState = {
     profileImg: '',
     response: null,
+    booksResponse: []
 }
 
 export default function profileReducer(state = INIT_STATE, action: any) {
@@ -24,6 +25,11 @@ export default function profileReducer(state = INIT_STATE, action: any) {
             }
         case UserActionsEnum.PROFILE_LOGOUT_CLEAR_IMAGE: 
             state.profileImg = '';
+            return {
+                ...state,
+            }
+        case UserActionsEnum.GET_ALL_BOOKS_SUCCESS:
+            state.booksResponse = action.responseToState;
             return {
                 ...state,
             }
