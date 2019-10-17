@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "914788222949",
+    "firebase_url": "https://book-store-react-native-c1059.firebaseio.com",
+    "project_id": "book-store-react-native-c1059",
+    "storage_bucket": "book-store-react-native-c1059.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914788222949:android:40ee51264637b26204110c",
+        "android_client_info": {
+          "package_name": "com.bsstore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914788222949-epit5l3i5ep88h0dq7d608jlj7shj8g2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADpWR61RQg_8FoRGbgiL3qmKklIdjIovs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "914788222949-epit5l3i5ep88h0dq7d608jlj7shj8g2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

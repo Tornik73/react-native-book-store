@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, View, Button, TextInput, ActivityIndicator } from 'react-native';
+import { Text, View, Button, TextInput, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation";
 import styles from './styles';
 import * as loginActions from "../../redux/actions/auth.actions";
 import * as profileActions from '../../redux/actions/profile.actions';
 import AsyncStorage from '@react-native-community/async-storage';
+import {GoogleAuth, GoogleConfigure} from '../../util/googleAuth/googleAuth';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -37,6 +38,10 @@ class LoginScreen extends Component<Props, State> {
   
   isLoad = () => this.props.isLogined; 
 
+  componentDidMount() {
+    GoogleConfigure();
+  }
+
   public onLogin() {
       this.props.login();
       this.props.loadingStart();
@@ -58,7 +63,41 @@ class LoginScreen extends Component<Props, State> {
         console.error(error);
       }
   }
-  
+
+  public loginGoogle = () => {
+    GoogleAuth().then((res: any)  => {
+      // if (res.idToken) {
+      //   this.props.loginGoogleRequest(
+      //     res.idToken,
+      //     () => {
+      //       this.queueProcess = this.goHome;
+      //       this.setupFirebase();
+      //       this.props.setLoadingLogin(false);
+      //     },
+      //     error => {
+      //       this.props.setLoadingLogin(false);
+      //       this.queueProcess = () => alert.show('Invalid Google Token!');
+      //     },
+      //   );
+      // } else {
+      //   switch (res) {
+      //     case 'cancel':
+      //       this.queueProcess = () => alert.show('Cancelled!');
+      //       break;
+      //     case 'progress':
+      //       this.queueProcess = () => alert.show('Still in progress');
+      //       break;
+      //     case 'ps_not_available':
+      //       this.queueProcess = () =>
+      //         alert.show('Google play services not available!');
+      //       break;
+      //     default:
+      //       break;
+      //   }
+
+      // }
+    });
+  };
   render() {
 
     return (
@@ -85,6 +124,25 @@ class LoginScreen extends Component<Props, State> {
                 title={'Login'} 
                 onPress={() => this.onLogin()}
               />
+
+              <View style={styles.socialButtonContainer}>
+                <TouchableOpacity 
+                  style={styles.googleButton}
+                  onPress={()=>this.loginGoogle()}>
+                  <Image 
+                    style={{height: 20, width: 20, marginRight: 16}} 
+                    source={require('../../../assets/img/png/googleLogo.png')}
+                  />
+                  <Text
+                    style={{
+                      fontFamily: 'WorkSans-Medium',
+                      color: '#45403f',
+                      fontSize: 18,
+                    }}>
+                    Google
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
         }
       </View>
