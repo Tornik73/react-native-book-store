@@ -1,8 +1,8 @@
 import styles from './styles';
 import React, { Component } from 'react';
-import { View, Text, FlatList, SafeAreaView, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, SafeAreaView, ActivityIndicator, RefreshControl } from 'react-native';
 import { AuthorsBooksModel } from '../../shared/model/authorBook.model';
-import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
+import { NavigationScreenProp, NavigationState, NavigationParams, ScrollView } from 'react-navigation';
 import { connect } from 'react-redux';
 import * as userActions from '../../redux/actions/user.actions';
 import { ProfileReducerState } from 'src/app/shared/model';
@@ -16,32 +16,37 @@ interface Props {
   bookResponseToState: AuthorsBooksModel[];
 }
 interface State { 
+  refreshing: boolean
   data: AuthorsBooksModel[];
-  isLoading: boolean;
 }
 interface mapStateToPropsModel {
   profileReducer: ProfileReducerState;
 }
 
 class HomeScreen extends Component<Props, State> {
+
   constructor(props: Props){
     super(props);
     this.state = {
+      refreshing: false,
       data: [],
-      isLoading: false,
+
     };
   }
 
 
   public getAllBooks(): void {
-    this.setState({ isLoading: false });
-    this.props.getAllBooks().then(() => {
+    this.setState({
+      refreshing: true
+    })
+    this.props.getAllBooks()
+    .then(() => {
         this.setState({
+          refreshing: false,
           data: this.props.bookResponseToState,
-          isLoading: true
         })
-      }
-    )
+
+    })
     .catch((error: object) => {
          console.error(error);
     });
@@ -62,33 +67,33 @@ class HomeScreen extends Component<Props, State> {
     );
   }
 
-  private renderData(): JSX.Element { 
+  private renderData() { 
+
     const book: AuthorsBooksModel[] = this.state.data; //TODO: Remove this line
     return( 
-      <SafeAreaView>
-        <FlatList
-          data={book}
-          renderItem={({ item }) => <this.Item bookItem={item.book}  />}
-          keyExtractor={item => item.bookId.toString()}
-        />
-      </SafeAreaView>
+          <FlatList
+            data={book}
+            renderItem={({ item }) => <this.Item bookItem={item.book}  />}
+            keyExtractor={item => item.bookId.toString()}
+          />
     )
   }
 
-  public render(): JSX.Element {
-    if(!this.state.isLoading){
-      return(
-        <View style={styles.container}>
-          <ActivityIndicator/>
-        </View>
-      )
-    } else {
-      return (
-        <View >
-          { this.renderData() } 
-        </View>
-      );
-    }
+  public render() {
+    return(
+      <SafeAreaView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.getAllBooks()} />
+        }
+        >
+        {!this.state.refreshing ?
+            (this.renderData() ):(
+            <View></View>)
+        }
+      </ScrollView>
+    </SafeAreaView>
+    )
   }
 }
 const mapDispatchToProps = (dispatch: any) => ({

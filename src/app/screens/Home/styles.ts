@@ -14,7 +14,13 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-  }
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: 'pink',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 export default styles;
