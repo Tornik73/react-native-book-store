@@ -10,6 +10,8 @@ import FooterComponent from './components/home/footer/FooterScreen';
 import LoginScreen from './screens/Login/LoginScreen';
 import ProfileScreen from './screens/Profile/Profile.screen';
 import firebase from 'react-native-firebase';
+import CartScreen from './screens/Cart/CartScreen';
+
 export class EmptyScreen extends Component{
   render(){
     return (<View></View>)
@@ -21,6 +23,7 @@ const TopLevelNavigation = createAppContainer(
     Home: { screen: HomeScreen, navigationOptions: () => ({ title: FooterItemsEnum.HOME, tabBarTestID: FooterItemsEnum.HOME }) },
     Profile: {screen: ProfileScreen, navigationOptions: () => ({ title: FooterItemsEnum.PROFILE, tabBarTestID: FooterItemsEnum.PROFILE })},
     Login: { screen: LoginScreen, navigationOptions: () => ({ title: FooterItemsEnum.LOGIN, tabBarTestID: FooterItemsEnum.LOGIN})},
+    Cart: { screen: CartScreen, navigationOptions: () => ({ title: FooterItemsEnum.CART, tabBarTestID: FooterItemsEnum.CART})},
   }, {
     tabBarComponent: props => <FooterComponent {...props} />,
   })
@@ -65,7 +68,6 @@ export default class App extends Component{
     );
   }
 
-
   messageListener = async () => {
 
     const notificationListener = firebase.notifications().onNotification((notification) => {
@@ -88,10 +90,12 @@ export default class App extends Component{
       console.log(JSON.stringify(message));
     });
   }
+
   componentDidMount() {
     this.checkPermission();
     this.messageListener();
   }
+
   render(){
     return (
       <Provider store={mainStore}>

@@ -10,13 +10,12 @@ const AxiosInstance = axios.create({
 })
 
 AxiosInstance.interceptors.request.use(async (config) => {
-    let token: string | null = await AsyncStorage.getItem('token').then(token => token);;
+    let token: string | null = await AsyncStorage.getItem('token').then(token => token);
     if (token) {
         config.headers['logintoken'] = token;
     } else {
         config.headers.Authorization = null;
     }
-    // console.log(config);
     return config;
 });
 

@@ -1,14 +1,15 @@
 import styles from './styles';
 import React, { Component } from 'react';
-import { Text, View, Image, TouchableOpacity, Button } from 'react-native';
+import { Text, View, Image, TouchableOpacity, Button, NativeModules, TextInput } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
+import { NavigationScreenProp, NavigationState, NavigationParams, ScrollView } from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as loginActions from "../../redux/actions/auth.actions";
 import * as profileActions from "../../redux/actions/profile.actions";
 import { UserModel, AuthReducerState, ProfileReducerState } from 'src/app/shared/model';
 import { environment } from '../../environments/environment';
 import ImagePicker from 'react-native-image-picker';
+import Base64Component from '../../components/base64/base64.component';
 
 const jwt = require('jwt-decode');
 const RNGRP = require('react-native-get-real-path');
@@ -29,15 +30,14 @@ interface Props {
 interface State {
   user: UserModel;
   previosProfileImage: string;
-  profileImage: string| any; // TODO: Remove any
-  editMode: boolean
+  profileImage: string | any; // TODO: Remove any
+  editMode: boolean;
 }
 
 interface mapStateToPropsModel {
   authReducer: AuthReducerState;
   profileReducer: ProfileReducerState;
 }
-
 
 class ProfileScreen extends Component<Props, State> {
   
@@ -59,7 +59,7 @@ class ProfileScreen extends Component<Props, State> {
       },
       previosProfileImage: '',
       profileImage: environment.defaultImg,
-      editMode: false
+      editMode: false,
     };
   }
 
@@ -147,11 +147,11 @@ class ProfileScreen extends Component<Props, State> {
   public logOut(): void {
     this.props.logout();
   }
- 
+
   render() {
    const { user, profileImage } = this.state;
     return (
-      <View>
+      <ScrollView>
         <View>
           { profileImage && (
             <Image style={styles.avatar} source={{uri: profileImage}}/>
@@ -183,10 +183,11 @@ class ProfileScreen extends Component<Props, State> {
                 
               <TouchableOpacity style={styles.buttonContainer} onPress={() => this.logOut()}>
                 <Text>Log out</Text>  
-              </TouchableOpacity>              
+              </TouchableOpacity>    
+              <Base64Component />
           </View>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -209,3 +210,6 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(ProfileScreen)
+
+
+

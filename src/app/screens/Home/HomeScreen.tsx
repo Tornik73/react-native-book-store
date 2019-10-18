@@ -10,15 +10,14 @@ import { ProfileReducerState } from 'src/app/shared/model';
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   getAllBooks: () => Promise<AuthorsBooksModel>;
-  token: string;
-  isLoad: boolean;
-  isLogined: boolean;
   bookResponseToState: AuthorsBooksModel[];
 }
+
 interface State { 
   refreshing: boolean
   data: AuthorsBooksModel[];
 }
+
 interface mapStateToPropsModel {
   profileReducer: ProfileReducerState;
 }
@@ -33,7 +32,6 @@ class HomeScreen extends Component<Props, State> {
 
     };
   }
-
 
   public getAllBooks(): void {
     this.setState({
@@ -85,8 +83,7 @@ class HomeScreen extends Component<Props, State> {
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.getAllBooks()} />
-        }
-        >
+        }>
         {!this.state.refreshing ?
             (this.renderData() ):(
             <View></View>)

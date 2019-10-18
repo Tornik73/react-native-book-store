@@ -1,5 +1,6 @@
 export enum FooterItemsEnum{
     HOME = 'Home',
     LOGIN = 'Login',
-    PROFILE = 'Profile'
+    PROFILE = 'Profile',
+    CART = 'Cart'
 }
