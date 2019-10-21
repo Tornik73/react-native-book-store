@@ -1,6 +1,6 @@
 import styles from './styles';
 import React, { Component } from 'react';
-import { Text, View, Image, TouchableOpacity, Button, NativeModules, TextInput } from 'react-native';
+import { Text, View, Image, TouchableOpacity, Button } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationScreenProp, NavigationState, NavigationParams, ScrollView } from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';

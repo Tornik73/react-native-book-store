@@ -35,7 +35,9 @@ target 'bsStore' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
 
-  pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
+  # pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
+
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'bsStoreTests' do
     inherit! :search_paths

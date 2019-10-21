@@ -1,6 +1,6 @@
 import { Component } from "react";
 import React from "react";
-import { View, Text, TextInput, Button, NativeModules } from "react-native";
+import { View, Text, TextInput, Button, Platform, NativeModules } from "react-native";
 import style from "./style"; 
 
 interface Props {}
@@ -23,17 +23,23 @@ class Base64Component extends Component<Props, State>{
     }
     
     encodeStringToBase64 = (stringToEncode: string) => {
-        NativeModules.Bulb.encodeToBase64(stringToEncode, (encodedString: string) => {
-          console.log(encodedString);
-          this.setState({encodedText: encodedString});
-        });
+        if(Platform.OS === 'ios'){
+            alert('ios'); 
+        }
+        else {
+            NativeModules.Bulb.encodeToBase64(stringToEncode, (encodedString: string) => {
+              console.log(encodedString);
+              this.setState({encodedText: encodedString});
+            });
+            alert('android');
+        }
     
       }
     
     decodeStringFromBase64 = (stringToDecode: string) => {
-        NativeModules.Bulb.decodeStringFromBase64(stringToDecode, (decodedString: string) => {
-          this.setState({decodedText: decodedString});
-        });
+        // NativeModules.Bulb.decodeStringFromBase64(stringToDecode, (decodedString: string) => {
+        //   this.setState({decodedText: decodedString});
+        // });
     }
 
     render() {
