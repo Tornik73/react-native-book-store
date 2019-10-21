@@ -6,20 +6,91 @@ import RNPaypal from 'react-native-paypal-lib';
 import Axios from 'axios';
 import Stripe from 'react-native-stripe-api';
 import { environment } from '../../environments/environment';
+import AddSubscriptionView from '../../components/addSubscriptionView/AddSubscriptionView.component';
+
+
+const STRIPE_ERROR = 'Payment service error. Try again later.';
+const SERVER_ERROR = 'Server error. Try again later.';
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_uwjRZA128Nvmq3111lJLJxhs00rQ8H9M7T';
+
+const getCreditCardToken = (creditCardData) => {
+  const card = {
+    'card[number]': creditCardData.values.number.replace(/ /g, ''),
+    'card[exp_month]': creditCardData.values.expiry.split('/')[0],
+    'card[exp_year]': creditCardData.values.expiry.split('/')[1],
+    'card[cvc]': creditCardData.values.cvc
+  };
+  return fetch('https://api.stripe.com/v1/tokens', {
+    headers: {
+      // Use the correct MIME type for your server
+      Accept: 'application/json',
+      // Use the correct Content Type to send data to Stripe
+      'Content-Type': 'application/x-www-form-urlencoded',
+      // Use the Stripe publishable key as Bearer
+      Authorization: `Bearer ${STRIPE_PUBLISHABLE_KEY}`
+    },
+    // Use a proper HTTP method
+    method: 'post',
+    // Format the credit card data to a string of key-value pairs
+    // divided by &
+    body: Object.keys(card)
+      .map(key => key + '=' + card[key])
+      .join('&')
+  }).then(response => response.json());
+};
+
+const subscribeUser = (creditCardToken) => {
+  return new Promise((resolve) => {
+    console.log('Credit card token\n', creditCardToken);
+    setTimeout(() => {
+      resolve({ status: true });
+    }, 1000)
+  });
+};
+
+
+const createCreditCardToken = (creditCardData) => {
+  const card = {
+      'card[number]': creditCardData.values.number.replace(/ /g, ''),
+      'card[exp_month]': creditCardData.values.expiry.split('/')[0],
+      'card[exp_year]': creditCardData.values.expiry.split('/')[1],
+      'card[cvc]': creditCardData.values.cvc
+  };
+  return fetch('https://api.stripe.com/v1/tokens', {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${STRIPE_PUBLISHABLE_KEY}`
+    },
+    method: 'post',
+    body: Object.keys(card)
+      .map(key => key + '=' + card[key])
+      .join('&')
+  }).then(response => response.json());
+};
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
-interface State { }
+interface State {
+  submitted: boolean;
+  error: null | any;
+ }
 
 interface mapStateToPropsModel {}
 
 class CartScreen extends Component<Props, State> {
 
+  static navigationOptions = {
+    title: 'Subscription page',
+  };
+
   constructor(props: Props){
     super(props);
     this.state = {
+      submitted: false,
+      error: null
     };
   }
 
@@ -38,32 +109,59 @@ class CartScreen extends Component<Props, State> {
         console.log(err.message)
     })
   }
-  public payWithStripe = async () => {
-    const apiKey = 'pk_test_uwjRZA128Nvmq3111lJLJxhs00rQ8H9M7T';
-    const client = new Stripe(apiKey);
+  onSubmit = async (creditCardInput) => {
 
-    // Create a Stripe token with new card infos
-    const token = await client.createToken({
-          number: '4242424242424242' ,
-          exp_month: '09', 
-          exp_year: '20', 
-          cvc: '111',
-          address_zip: '12345'
+    const {
+      navigation
+    } = this.props;
+    this.setState({
+      submitted: true
+    });
+    let creditCardToken;
+    try {
+      creditCardToken = await getCreditCardToken(creditCardInput);
+      if (creditCardToken.error) {
+        this.setState({
+          submitted: false,
+          error: STRIPE_ERROR
         });
-    fetch(environment.apiUrl+'users/charge', {
-          method: 'POST', 
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(token)
-        }).then(res => console.log(res));
+        return;
+      }
+    } catch (e) {
+      this.setState({
+        submitted: false,
+        error: STRIPE_ERROR
+      });
+      return;
+    }
+    const {
+      error
+    } = await subscribeUser(creditCardToken);
+    if (error) {
+      this.setState({
+        submitted: false,
+        error: SERVER_ERROR
+      });
+    } else {
+      this.setState({
+        submitted: false,
+        error: null
+      });
+      navigation.navigate('Home')
+    }
   }
 
   public renderData = () => {
-    return(
+    const { submitted, error } = this.state;
+    return( 
       <View style={styles.container}>
         <Button title={'PayPal'} onPress={() => {this.payWithPayPal()}}></Button>
-        <Button color={'red'} title={'Stripe'} onPress={() => {this.payWithStripe()}}></Button>
+        {/* <Button color={'red'} title={'Stripe'} onPress={() => {this.payWithStripe()}}></Button> */}
+        <AddSubscriptionView
+          error={error}
+          submitted={submitted} 
+          onSubmit={this.onSubmit}
+        />
       </View>
     )
   }

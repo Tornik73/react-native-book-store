@@ -54,6 +54,8 @@
     "eslint": "6.4.0",
     "jest": "24.9.0",
     "metro-react-native-babel-preset": "0.51.1",
+    "react-native-credit-card-input": "^0.4.1",
+    "react-native-keyboard-spacer": "^0.4.1",
     "react-test-renderer": "16.9.0",
     "typescript": "^3.6.3"
   },
