@@ -1,6 +1,6 @@
 import styles from './styles';
 import React, { Component } from 'react';
-import { View, Text, FlatList, SafeAreaView, ActivityIndicator, RefreshControl } from 'react-native';
+import { View, Text, FlatList, SafeAreaView, ActivityIndicator, RefreshControl, TouchableOpacity, Button } from 'react-native';
 import { AuthorsBooksModel } from '../../shared/model/authorBook.model';
 import { NavigationScreenProp, NavigationState, NavigationParams, ScrollView } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -79,17 +79,18 @@ class HomeScreen extends Component<Props, State> {
 
   public render() {
     return(
-      <SafeAreaView>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.getAllBooks()} />
-        }>
-        {!this.state.refreshing ?
-            (this.renderData() ):(
-            <View></View>)
-        }
-      </ScrollView>
-    </SafeAreaView>
+        <SafeAreaView>
+
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.getAllBooks()} />
+            }>
+            {!this.state.refreshing ?
+                (this.renderData() ):(
+                <View></View>)
+            }
+          </ScrollView>
+        </SafeAreaView>
     )
   }
 }

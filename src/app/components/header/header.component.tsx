@@ -30,16 +30,20 @@ export class HomeHeaderComponent extends Component/*<Props, State>*/ {
                     (scenes.length > 1) ?
                         <TouchableOpacity onPress={() => navigation.dispatch(NavigationActions.back())}>
                             <View style={style.backWrapper}>
-                                <Image style={style.back} source={require('../../../../assets/img/header/back.png')}></Image>
+                                <Image style={style.back} source={require('../../../assets/img/png/header/back.png')}></Image>
                             </View>
                         </TouchableOpacity>
-                        : null
+                        : <TouchableOpacity onPress={() => navigation.dispatch(NavigationActions.navigate({routeName: 'Chat',}))}>
+                            <View style={style.backWrapper}>
+                                <Image style={style.back} source={require('../../../assets/img/png/chat/chat.png')}></Image>
+                            </View>
+                        </TouchableOpacity>
                 }
                 <View style={style.titleWrapper}>
-                    <Text style={style.title}>{'temup'}</Text>
+                    <Text style={style.title}>{'BookStore'}</Text>
                 </View>
                 <View style={style.settingsWrapper}>
-                    <Image style={style.settings} source={require('../../../../assets/img/header/settings.png')}></Image>
+                    <Image style={style.settings} source={require('../../../assets/img/png/header/settings.png')}></Image>
                 </View>
             </View>
         );

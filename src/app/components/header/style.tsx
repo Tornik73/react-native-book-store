@@ -17,7 +17,7 @@ export default StyleSheet.create({
     },
     back:{
         height: 20,
-        width: 12
+        width: 20
     },
     titleWrapper:{
         marginLeft: 'auto'
