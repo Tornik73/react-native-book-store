@@ -23,7 +23,13 @@ class Base64Component extends Component<Props, State>{
     }
     
     encodeStringToBase64 = (stringToEncode: string) => {
-        if(Platform.OS === 'ios'){
+        if(Platform.OS === 'ios') {
+            NativeModules.Counter.hi();
+            NativeModules.Counter.encodeToBase64( stringToEncode, (error: any,encodedString: string) => {
+                console.log(encodedString);
+                this.setState({encodedText: encodedString});
+              });
+            // alert(NativeModules);
             alert('ios'); 
         }
         else {
@@ -37,14 +43,17 @@ class Base64Component extends Component<Props, State>{
       }
     
     decodeStringFromBase64 = (stringToDecode: string) => {
-        // NativeModules.Bulb.decodeStringFromBase64(stringToDecode, (decodedString: string) => {
-        //   this.setState({decodedText: decodedString});
-        // });
+        NativeModules.Counter.decodeStringFromBase64(stringToDecode, (error: any, decodedString: string) => {
+            console.log(decodedString);
+            this.setState({decodedText: decodedString});
+        });
     }
 
     render() {
+
         return (
             <View>  
+
                 <View style={style.inputContainer}>
                     <TextInput onChangeText={(text) => this.setState({encodeText: text})} placeholder="Encode String to base64"/>         
                     <Button title={'Submit'} onPress={() => this.encodeStringToBase64(this.state.encodeText)}></Button>
