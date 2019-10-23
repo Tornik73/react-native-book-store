@@ -5,7 +5,7 @@ import { NavigationScreenProp, NavigationState, NavigationParams, ScrollView, Fl
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { DotIndicator } from '../../components/DotIndicators/index';
 import { ToastAndroid } from 'react-native';
-import { ChatMessageModel, SendedChatMessage, ChatMessageResponse } from '../../shared/model/';
+import { ChatMessageModel, SendedChatMessage, ChatMessageResponse, ChatReducerState } from '../../shared/model/';
 import { connect } from 'react-redux';
 import * as chatActions from '../../redux/actions/chat.actions';
 import UUIDGenerator from 'react-native-uuid-generator';
@@ -15,13 +15,16 @@ interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
     postMessage: (sendedChatMessage: SendedChatMessage) => Promise<ChatMessageResponse>;
     clearState: () => void;
-    unRecievedMessages: [];
+    unRecievedMessages: ChatMessageModel[];
 }
 
 interface State {
     sendingMessage: boolean;
     renderMessages: ChatMessageModel[];
+}
 
+interface mapStateToPropsModel {
+    chatReducer: ChatReducerState;
 }
 
 const chatMessage: SendedChatMessage = {
@@ -48,6 +51,7 @@ class ChatScreen extends Component<Props, State> {
             renderMessages: [
                 {
                     id: 1,
+                    uuid: null,
                     name: 'Alberto Raya',
                     messageText: 'Hi, how are you guys?',
                     time: '2:16PM',
@@ -57,6 +61,7 @@ class ChatScreen extends Component<Props, State> {
                 }, 
                 {
                     id: 2,
+                    uuid: null,
                     name: 'Dameon Peterson',
                     messageText: 'I’m doing great! Working hard on the TeamUp app',
                     time: '2:16PM',
@@ -66,6 +71,7 @@ class ChatScreen extends Component<Props, State> {
                 }, 
                 {
                     id: 3,
+                    uuid: null,
                     name: 'Alberto Raya',
                     messageText: 'Hi, how are you guys?',
                     time: '2:16PM',
@@ -75,6 +81,7 @@ class ChatScreen extends Component<Props, State> {
                 },
                 {
                     id: 4,
+                    uuid: null,
                     name: 'LoginName',
                     messageText: 'It’s not finished yet?',
                     time: '2:16PM',
@@ -84,6 +91,7 @@ class ChatScreen extends Component<Props, State> {
                 },
                 {
                     id: 5,
+                    uuid: null,
                     name: 'Darren Adams',
                     messageText: 'I’m doing great! Working hard on the TeamUp app',
                     time: '2:16PM',
@@ -93,6 +101,7 @@ class ChatScreen extends Component<Props, State> {
                 },
                 {
                     id: 6,
+                    uuid: null,
                     name: 'Seri Anand',
                     messageText: 'I’m doing great! Working hard on the TeamUp app',
                     time: '2:16PM',
@@ -102,6 +111,7 @@ class ChatScreen extends Component<Props, State> {
                 },
                 {
                     id: 7,
+                    uuid: null,
                     name: 'Cha Ji-Hun',
                     messageText: 'Hi, how are you guys?',
                     time: '2:16PM',
@@ -111,6 +121,7 @@ class ChatScreen extends Component<Props, State> {
                 },
                 {
                     id: 8,
+                    uuid: null,
                     name: 'LoginName',
                     messageText: 'It’s not finished yet?',
                     time: '2:16PM',
@@ -120,6 +131,7 @@ class ChatScreen extends Component<Props, State> {
                 },
                 {
                     id: 9,
+                    uuid: null,
                     name: 'LoginName',
                     messageText: 'It’s not finished yet?',
                     time: '2:16PM',
@@ -129,6 +141,7 @@ class ChatScreen extends Component<Props, State> {
                 },
                 {
                     id: 10,
+                    uuid: null,
                     name: 'LoginName',
                     messageText: 'It’s not finished yet?',
                     time: '2:17PM',
@@ -138,6 +151,7 @@ class ChatScreen extends Component<Props, State> {
                 },
                 {
                     id: 11,
+                    uuid: null,
                     name: 'LoginName',
                     messageText: 'It’s not finished yet?',
                     time: '2:18PM',
@@ -147,6 +161,7 @@ class ChatScreen extends Component<Props, State> {
                 },
                 {
                     id: 12,
+                    uuid: null,
                     name: 'LoginName',
                     messageText: 'It’s not finished yet?',
                     time: '2:25PM',
@@ -156,6 +171,11 @@ class ChatScreen extends Component<Props, State> {
                 },
             ]
         };
+    }
+
+    componentDidMount(){
+        this.subscribeToNetworkState();
+        // this.unSubscribeFromNetworkState();
     }
 
     private pushMessageToState = (message:  SendedChatMessage, id: number | null = null): void => {
@@ -173,16 +193,13 @@ class ChatScreen extends Component<Props, State> {
     private changeMessageStatusToRecievedByUUID = (id: number, uuid: string | null = null): void => {
         setTimeout(()=> { // TODO: REMOVE 
             this.setState((state: State): State => {
-
                 const renderMessages = [...state.renderMessages];
                 renderMessages.forEach(item => {
 
                     if(item.uuid === uuid){
-
                         item.id = id;
                         item.isReceived = true;
                     }
-                    // console.log(item);
                 })
                 return {
                     renderMessages,
@@ -192,16 +209,15 @@ class ChatScreen extends Component<Props, State> {
             });
         }, 1000);
     }
+
     private postMessage = (chatMessage: SendedChatMessage) :void => {
         this.props.postMessage(chatMessage)
         .then(response => { 
-            // console.log(response);
             this.scroll.props.scrollToEnd(true); 
             this.changeMessageStatusToRecievedByUUID(response.messageId, response.uuid);
         })
         .catch(err => {
             console.log(err, 'err');
-
         });
     }
 
@@ -216,18 +232,14 @@ class ChatScreen extends Component<Props, State> {
 
         // Change status when message will read
     }
-    
 
-    public render() {
-        // Subscribe
-        const unsubscribe = NetInfo.addEventListener(state => {
-            console.log("Is connected?", state.isConnected);
+    private subscribeToNetworkState = (): void => {
+        NetInfo.addEventListener(state => {
             if(!state.isConnected){
                 ToastAndroid.show('Connection to the server is lost!', ToastAndroid.SHORT);
             } 
             if(state.isConnected){
                 if(this.props.unRecievedMessages.length > 0){
-                    console.log(this.props.unRecievedMessages.length)
                     this.props.unRecievedMessages.forEach(item => {
                             this.postMessage(item);
                     })
@@ -235,7 +247,9 @@ class ChatScreen extends Component<Props, State> {
                 }
             }
         });
+    }
 
+    public render() {
         return(
             <View>
                 <KeyboardAwareScrollView  style={ styles.chatContainer } 
@@ -352,17 +366,16 @@ class ChatScreen extends Component<Props, State> {
     }
 }
 
-
-
 const mapDispatchToProps = (dispatch: any) => ({
     postMessage: (chatMessage: SendedChatMessage) => dispatch(chatActions.sendMessage(chatMessage)),
     clearState: () => dispatch(chatActions.clearState()) 
 });
-const mapStateToProps = (state: any) => {
+
+const mapStateToProps = (state: mapStateToPropsModel) => {
     return {
         unRecievedMessages: state.chatReducer.unResolvedPromises,
     }
-  };
+};
 
 export default connect(
     mapStateToProps,

@@ -1,16 +1,11 @@
 import { ChatActionsEnum } from "../../shared/enums";
+import { ChatReducerState } from "src/app/shared/model";
 
-
-interface InitStateModel {
-    unResolvedPromises: Promise<any>[]
-}
-
-const INIT_STATE: InitStateModel = {
+const INIT_STATE: ChatReducerState = {
     unResolvedPromises: []
 }
 
 export default function chatReducer(state = INIT_STATE, action: any) {
-    console.log(action.type);
     switch (action.type) {
 
         case ChatActionsEnum.SEND_MESSAGE_SUCCESS:

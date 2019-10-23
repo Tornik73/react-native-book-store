@@ -1,11 +1,11 @@
 export interface ChatMessageModel {
     id: number | null;
-    uuid?: string | null;
+    uuid: string | null;
     name: string;
     messageText: string;
     time: string; // TODO: Change on Date type
-    isRead?: boolean;
-    isReceived?: boolean;
+    isRead: boolean;
+    isReceived: boolean;
     date: string; // TODO: Change on Date type
 }
 
