@@ -6,7 +6,7 @@ export function getAllBooks() {
     return async (dispatch: any) => {
         await BookService.getAllBooks()
             .then((response) => dispatch(getAllBooksSuccess(response))).
-            catch((err) => console.log(err));
+            catch((err) => console.error(err));
     }
 }
 

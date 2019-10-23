@@ -38,7 +38,8 @@ class HomeScreen extends Component<Props, State> {
       refreshing: true
     })
     this.props.getAllBooks()
-    .then(() => {
+    .then((response) => {
+      // console.log(response);
         this.setState({
           refreshing: false,
           data: this.props.bookResponseToState,

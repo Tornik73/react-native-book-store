@@ -46,7 +46,7 @@ export function logout() {
             logout()
             .then(() => dispatch(logoutSuccess()))
             .then(() => dispatch(profileClearImage()))
-            .catch((err:any) => console.log(err))
+            .catch((err:any) => console.error(err))
     }
 }
 

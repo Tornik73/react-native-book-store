@@ -26,7 +26,7 @@ class Base64Component extends Component<Props, State>{
         if(Platform.OS === 'ios') {
             NativeModules.Counter.hi();
             NativeModules.Counter.encodeToBase64( stringToEncode, (error: any,encodedString: string) => {
-                console.log(encodedString);
+                // console.log(encodedString);
                 this.setState({encodedText: encodedString});
               });
             // alert(NativeModules);
@@ -34,7 +34,7 @@ class Base64Component extends Component<Props, State>{
         }
         else {
             NativeModules.Bulb.encodeToBase64(stringToEncode, (encodedString: string) => {
-              console.log(encodedString);
+            //   console.log(encodedString);
               this.setState({encodedText: encodedString});
             });
             alert('android');
@@ -44,7 +44,7 @@ class Base64Component extends Component<Props, State>{
     
     decodeStringFromBase64 = (stringToDecode: string) => {
         NativeModules.Counter.decodeStringFromBase64(stringToDecode, (error: any, decodedString: string) => {
-            console.log(decodedString);
+            // console.log(decodedString);
             this.setState({decodedText: decodedString});
         });
     }

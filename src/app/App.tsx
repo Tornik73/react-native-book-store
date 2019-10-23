@@ -75,7 +75,7 @@ export default class App extends Component{
   private getFcmToken = async () => {
     const fcmToken = await firebase.messaging().getToken();
     if (fcmToken) {
-      console.log(fcmToken);
+      // console.log(fcmToken);
     } else {
       this.showAlert('Failed', 'No token received');
     }
@@ -111,7 +111,7 @@ export default class App extends Component{
     }
 
     firebase.messaging().onMessage((message) => {
-      console.log(JSON.stringify(message));
+      // console.log(JSON.stringify(message));
     });
   }
 

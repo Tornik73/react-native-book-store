@@ -252,5 +252,9 @@ export default StyleSheet.create({
         textAlign: 'center',
         marginBottom: 30,
         marginTop: 10
+    },
+    timeIcon: {
+        width: 16,
+        height: 16
     }
 });
