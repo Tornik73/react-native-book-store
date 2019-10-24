@@ -12,26 +12,27 @@ import LoginScreen from './screens/Login/LoginScreen';
 import ProfileScreen from './screens/Profile/Profile.screen';
 import firebase from 'react-native-firebase';
 // import CartScreen from './screens/Cart/CartScreen';
-// import ChatScreen from './screens/Chat/Chat.screen';
+import ChatScreen from './screens/Chat/Chat.screen';
 import { HomeHeaderComponent } from '../app/components/header/header.component';
+import HomeScreen from './screens/Home';
 
-// const HomeStack = createStackNavigator({
-//   // Home: HomeScreen,
-//   // Chat: ChatScreen,
-// }, {
-//   defaultNavigationOptions: {
-//     header: (props) => <HomeHeaderComponent {...props}/>,
-//   },
-// });
-// HomeStack.navigationOptions = ({ navigation }) => {
-//   let tabBarVisible = true;
-//   if (navigation.state.index > 0) {
-//     tabBarVisible = false;
-//   }
-//   return {
-//     tabBarVisible,
-//   };
-// };
+const HomeStack = createStackNavigator({
+  Home: HomeScreen,
+  Chat: ChatScreen,
+}, {
+  defaultNavigationOptions: {
+    header: (props) => <HomeHeaderComponent {...props}/>,
+  },
+});
+HomeStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true;
+  if (navigation.state.index > 0) {
+    tabBarVisible = false;
+  }
+  return {
+    tabBarVisible,
+  };
+};
 
 export class EmptyScreen extends Component{
   render(){
@@ -41,7 +42,7 @@ export class EmptyScreen extends Component{
 
 const TopLevelNavigation = createAppContainer(
   createBottomTabNavigator({
-    // Home: { screen: HomeStack, navigationOptions: () => ({ title: FooterItemsEnum.HOME, tabBarTestID: FooterItemsEnum.HOME }) },
+    Home: { screen: HomeStack, navigationOptions: () => ({ title: FooterItemsEnum.HOME, tabBarTestID: FooterItemsEnum.HOME }) },
     Profile: {screen: ProfileScreen, navigationOptions: () => ({ title: FooterItemsEnum.PROFILE, tabBarTestID: FooterItemsEnum.PROFILE })},
     Login: { screen: LoginScreen, navigationOptions: () => ({ title: FooterItemsEnum.LOGIN, tabBarTestID: FooterItemsEnum.LOGIN})},
     // Cart: { screen: CartScreen, navigationOptions: () => ({ title: FooterItemsEnum.CART, tabBarTestID: FooterItemsEnum.CART})},

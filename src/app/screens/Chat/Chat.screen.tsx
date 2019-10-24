@@ -11,374 +11,373 @@ import * as chatActions from '../../redux/actions/chat.actions';
 import UUIDGenerator from 'react-native-uuid-generator';
 import NetInfo from "@react-native-community/netinfo";
 
-// interface Props {
-//     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
-//     postMessage: (sendedChatMessage: SendedChatMessage) => Promise<ChatMessageResponse>;
-//     clearState: () => void;
-//     unRecievedMessages: ChatMessageModel[];
-// }
+interface Props {
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+    postMessage: (sendedChatMessage: SendedChatMessage) => ChatMessageModel;
+    clearState: () => void;
+    unRecievedMessages: ChatMessageModel[];
+}
 
-// interface State {
-//     sendingMessage: boolean;
-//     renderMessages: ChatMessageModel[];
-// }
+interface State {
+    sendingMessage: boolean;
+    renderMessages: ChatMessageModel[];
+}
 
-// interface mapStateToPropsModel {
-//     chatReducer: ChatReducerState;
-// }
+interface mapStateToPropsModel {
+    chatReducer: ChatReducerState;
+}
 
-// const chatMessage: SendedChatMessage = {
-//     id: null,
-//     uuid: null,
-//     name: 'LoginName',
-//     isRead: false,
-//     isReceived: false,
-//     messageText: 'Bla bla',
-//     time: '2:25PM',
-//     date: '09.08.2018'
-// }; // TODO: REMOVE
+const chatMessage: SendedChatMessage = {
+    id: null,
+    uuid: null,
+    name: 'LoginName',
+    isRead: false,
+    isReceived: false,
+    messageText: 'Bla bla',
+    time: '2:25PM',
+    date: '09.08.2018'
+}; // TODO: REMOVE
 
 
-// class ChatScreen extends Component<Props, State> {  
-//     private oldDate: string;
-//     private scroll: any;
+class ChatScreen extends Component<Props, State> {  
+    private oldDate: string;
+    private scroll: any;
 
-//     constructor(props: Props){
-//         super(props);
-//         this.oldDate = '';
-//         this.state = {
-//             sendingMessage: false,
-//             renderMessages: [
-//                 {
-//                     id: 1,
-//                     uuid: null,
-//                     name: 'Alberto Raya',
-//                     messageText: 'Hi, how are you guys?',
-//                     time: '2:16PM',
-//                     isRead: true,
-//                     isReceived: true,
-//                     date: '05.08.2018',
-//                 }, 
-//                 {
-//                     id: 2,
-//                     uuid: null,
-//                     name: 'Dameon Peterson',
-//                     messageText: 'I’m doing great! Working hard on the TeamUp app',
-//                     time: '2:16PM',
-//                     isRead: true,
-//                     isReceived: true,
-//                     date: '05.08.2018'
-//                 }, 
-//                 {
-//                     id: 3,
-//                     uuid: null,
-//                     name: 'Alberto Raya',
-//                     messageText: 'Hi, how are you guys?',
-//                     time: '2:16PM',
-//                     isRead: true,
-//                     isReceived: true,
-//                     date: '05.08.2018'
-//                 },
-//                 {
-//                     id: 4,
-//                     uuid: null,
-//                     name: 'LoginName',
-//                     messageText: 'It’s not finished yet?',
-//                     time: '2:16PM',
-//                     isRead: true,
-//                     isReceived: true,
-//                     date: '05.08.2018'
-//                 },
-//                 {
-//                     id: 5,
-//                     uuid: null,
-//                     name: 'Darren Adams',
-//                     messageText: 'I’m doing great! Working hard on the TeamUp app',
-//                     time: '2:16PM',
-//                     isRead: true,
-//                     isReceived: true,
-//                     date: '06.08.2018'
-//                 },
-//                 {
-//                     id: 6,
-//                     uuid: null,
-//                     name: 'Seri Anand',
-//                     messageText: 'I’m doing great! Working hard on the TeamUp app',
-//                     time: '2:16PM',
-//                     isRead: true,
-//                     isReceived: true,
-//                     date: '06.08.2018'
-//                 },
-//                 {
-//                     id: 7,
-//                     uuid: null,
-//                     name: 'Cha Ji-Hun',
-//                     messageText: 'Hi, how are you guys?',
-//                     time: '2:16PM',
-//                     isRead: true,
-//                     isReceived: true,
-//                     date: '06.08.2018'
-//                 },
-//                 {
-//                     id: 8,
-//                     uuid: null,
-//                     name: 'LoginName',
-//                     messageText: 'It’s not finished yet?',
-//                     time: '2:16PM',
-//                     isRead: true,
-//                     isReceived: true,
-//                     date: '06.08.2018'
-//                 },
-//                 {
-//                     id: 9,
-//                     uuid: null,
-//                     name: 'LoginName',
-//                     messageText: 'It’s not finished yet?',
-//                     time: '2:16PM',
-//                     isRead: true,
-//                     isReceived: true,
-//                     date: '06.08.2018'
-//                 },
-//                 {
-//                     id: 10,
-//                     uuid: null,
-//                     name: 'LoginName',
-//                     messageText: 'It’s not finished yet?',
-//                     time: '2:17PM',
-//                     isRead: true,
-//                     isReceived: true,
-//                     date: '07.08.2018'
-//                 },
-//                 {
-//                     id: 11,
-//                     uuid: null,
-//                     name: 'LoginName',
-//                     messageText: 'It’s not finished yet?',
-//                     time: '2:18PM',
-//                     isRead: true,
-//                     isReceived: true,
-//                     date: '07.08.2018'
-//                 },
-//                 {
-//                     id: 12,
-//                     uuid: null,
-//                     name: 'LoginName',
-//                     messageText: 'It’s not finished yet?',
-//                     time: '2:25PM',
-//                     isRead: true,
-//                     isReceived: true,
-//                     date: '08.08.2018'
-//                 },
-//             ]
-//         };
-//     }
+    constructor(props: Props){
+        super(props);
+        this.oldDate = '';
+        this.state = {
+            sendingMessage: false,
+            renderMessages: [
+                {
+                    id: 1,
+                    uuid: null,
+                    name: 'Alberto Raya',
+                    messageText: 'Hi, how are you guys?',
+                    time: '2:16PM',
+                    isRead: true,
+                    isReceived: true,
+                    date: '05.08.2018',
+                }, 
+                {
+                    id: 2,
+                    uuid: null,
+                    name: 'Dameon Peterson',
+                    messageText: 'I’m doing great! Working hard on the TeamUp app',
+                    time: '2:16PM',
+                    isRead: true,
+                    isReceived: true,
+                    date: '05.08.2018'
+                }, 
+                {
+                    id: 3,
+                    uuid: null,
+                    name: 'Alberto Raya',
+                    messageText: 'Hi, how are you guys?',
+                    time: '2:16PM',
+                    isRead: true,
+                    isReceived: true,
+                    date: '05.08.2018'
+                },
+                {
+                    id: 4,
+                    uuid: null,
+                    name: 'LoginName',
+                    messageText: 'It’s not finished yet?',
+                    time: '2:16PM',
+                    isRead: true,
+                    isReceived: true,
+                    date: '05.08.2018'
+                },
+                {
+                    id: 5,
+                    uuid: null,
+                    name: 'Darren Adams',
+                    messageText: 'I’m doing great! Working hard on the TeamUp app',
+                    time: '2:16PM',
+                    isRead: true,
+                    isReceived: true,
+                    date: '06.08.2018'
+                },
+                {
+                    id: 6,
+                    uuid: null,
+                    name: 'Seri Anand',
+                    messageText: 'I’m doing great! Working hard on the TeamUp app',
+                    time: '2:16PM',
+                    isRead: true,
+                    isReceived: true,
+                    date: '06.08.2018'
+                },
+                {
+                    id: 7,
+                    uuid: null,
+                    name: 'Cha Ji-Hun',
+                    messageText: 'Hi, how are you guys?',
+                    time: '2:16PM',
+                    isRead: true,
+                    isReceived: true,
+                    date: '06.08.2018'
+                },
+                {
+                    id: 8,
+                    uuid: null,
+                    name: 'LoginName',
+                    messageText: 'It’s not finished yet?',
+                    time: '2:16PM',
+                    isRead: true,
+                    isReceived: true,
+                    date: '06.08.2018'
+                },
+                {
+                    id: 9,
+                    uuid: null,
+                    name: 'LoginName',
+                    messageText: 'It’s not finished yet?',
+                    time: '2:16PM',
+                    isRead: true,
+                    isReceived: true,
+                    date: '06.08.2018'
+                },
+                {
+                    id: 10,
+                    uuid: null,
+                    name: 'LoginName',
+                    messageText: 'It’s not finished yet?',
+                    time: '2:17PM',
+                    isRead: true,
+                    isReceived: true,
+                    date: '07.08.2018'
+                },
+                {
+                    id: 11,
+                    uuid: null,
+                    name: 'LoginName',
+                    messageText: 'It’s not finished yet?',
+                    time: '2:18PM',
+                    isRead: true,
+                    isReceived: true,
+                    date: '07.08.2018'
+                },
+                {
+                    id: 12,
+                    uuid: null,
+                    name: 'LoginName',
+                    messageText: 'It’s not finished yet?',
+                    time: '2:25PM',
+                    isRead: true,
+                    isReceived: true,
+                    date: '08.08.2018'
+                },
+            ]
+        };
+    }
 
-//     componentDidMount(){
-//         this.subscribeToNetworkState();
-//         //TODO: this.unSubscribeFromNetworkState();
-//     }
+    componentDidMount(){
+        this.subscribeToNetworkState();
+        //TODO: this.unSubscribeFromNetworkState();
+    }
 
-//     private pushMessageToState = (message:  SendedChatMessage, id: number | null = null): void => {
-//         this.setState((state: State): State => {
-//             const renderMessages = [...state.renderMessages];
-//             message.id = id;
-//             renderMessages.push({...message});
-//             return {
-//                 renderMessages,
-//                 sendingMessage: state.sendingMessage
-//             };
-//         });
-//     }
+    private pushMessageToState = (message:  SendedChatMessage, id: number | null = null): void => {
+        this.setState((state: State): State => {
+            const renderMessages = [...state.renderMessages];
+            message.id = id;
+            renderMessages.push({...message});
+            return {
+                renderMessages,
+                sendingMessage: state.sendingMessage
+            };
+        });
+    }
 
-//     private changeMessageStatusToRecievedByUUID = (id: number, uuid: string | null = null): void => {
-//         setTimeout(()=> { // TODO: REMOVE 
-//             this.setState((state: State): State => {
-//                 const renderMessages = [...state.renderMessages];
-//                 renderMessages.forEach(item => {
+    private changeMessageStatusToRecievedByUUID = (id: number, uuid: string | null = null): void => {
 
-//                     if(item.uuid === uuid){
-//                         item.id = id;
-//                         item.isReceived = true;
-//                     }
-//                 })
-//                 return {
-//                     renderMessages,
-//                     sendingMessage: state.sendingMessage
-//                 };
+        setTimeout(()=> { // TODO: REMOVE 
+            this.scroll.props.scrollToEnd(true);
+            this.setState((state: State): State => {
+                const renderMessages = [...state.renderMessages];
+                renderMessages.forEach(item => {
 
-//             });
-//         }, 1000);
-//     }
+                    if(item.uuid === uuid){
+                        item.id = id;
+                        item.isReceived = true;
+                    }
+                })
+                return {
+                    renderMessages,
+                    sendingMessage: state.sendingMessage
+                };
 
-//     private postMessage = (chatMessage: SendedChatMessage) :void => {
-//         this.props.postMessage(chatMessage)
-//         .then(response => { 
-//             this.scroll.props.scrollToEnd(true); 
-//             this.changeMessageStatusToRecievedByUUID(response.messageId, response.uuid);
-//         })
-//         .catch(err => {
-//             console.log(err, 'err');
-//         });
-//     }
+            });
 
-//     private sendMessage = (): void => {
+        }, 1000);
+    }
 
-//         // Change status when message will recieved
-//         UUIDGenerator.getRandomUUID((uuid) => {
-//             chatMessage.uuid = uuid;
-//             this.pushMessageToState(chatMessage);
-//             this.postMessage(chatMessage);
-//         });
+    private postMessage = (chatMessage: SendedChatMessage) :void => {
+        const response = this.props.postMessage(chatMessage);
 
-//         // Change status when message will read
-//     }
+        this.changeMessageStatusToRecievedByUUID(response.id, response.uuid);
 
-//     private subscribeToNetworkState = (): void => {
-//         NetInfo.addEventListener(state => {
-//             if(!state.isConnected){
-//                 ToastAndroid.show('Connection to the server is lost!', ToastAndroid.SHORT);
-//             } 
-//             if(state.isConnected){
-//                 if(this.props.unRecievedMessages.length > 0){
-//                     this.props.unRecievedMessages.forEach(item => {
-//                             this.postMessage(item);
-//                     })
-//                     this.props.clearState();
-//                 }
-//             }
-//         });
-//     }
+    }
 
-//     public render() {
-//         return(
-//             <View>
-//                 <KeyboardAwareScrollView  style={ styles.chatContainer } 
-//                 innerRef={ref => {
-//                     this.scroll = ref
-//                 }}
-//                 >              
-//                 <ScrollView >
-//                     <FlatList
-//                         horizontal={false}
-//                         data={this.state.renderMessages}
-//                         renderItem={(item) => this.renderChatMessage(item.item, item.index)}
-//                     >
-//                     </FlatList>
-//                     {this.state.sendingMessage ? (
-//                         <View style={styles.sendingMessage}>
-//                             <View style={styles.arrowLeft}></View>
-//                                 <View style={styles.sendingMessageIndicator}>
-//                                         <DotIndicator color='rgb(62, 74, 89)' size={6} count={3}/>
-//                                 </View>
-//                         </View>
+    private sendMessage = (): void => {
 
-//                     ): ( <View></View>)}
-//                 </ScrollView> 
-//             </KeyboardAwareScrollView>
-//             <View  style={styles.inputMessageField}>
-//                 <View style={styles.inputField}>
-//                     <TouchableOpacity>
-//                         <Image style={styles.voiceImg} source={require('../../../assets/img/png/chat/voice.png')}></Image>
-//                     </TouchableOpacity> 
-//                     <TextInput style={styles.input} placeholderTextColor = 'rgb(62, 74, 89)' placeholder={"Type your message…"}>
-//                     </TextInput>
-//                 </View>
-//                 <TouchableOpacity onPress={() => {this.sendMessage()}}>
-//                     <View style={styles.sendMessage}>
-//                         <Image style={styles.sendMessageImg} source={require('../../../assets/img/png/chat/sendIcon.png')}></Image> 
-//                     </View>
-//                 </TouchableOpacity>
-//             </View>
-//         </View>
-//         )
-//     }
+        // Change status when message will recieved
+        UUIDGenerator.getRandomUUID((uuid) => {
+            chatMessage.uuid = uuid;
+            this.pushMessageToState(chatMessage);
+            this.postMessage(chatMessage);
+        });
 
-//     private setNewDate = (newDate: string): void => {
-//         this.oldDate = newDate; // TODO: REMOVE!
-//     }
+        // Change status when message will read
+    }
 
-//     private renderChatMessage = (item: ChatMessageModel, index: number) => {
-//         let flag = false;
+    private subscribeToNetworkState = (): void => {
+        NetInfo.addEventListener(state => {
+            if(!state.isConnected){
+                ToastAndroid.show('Connection to the server is lost!', ToastAndroid.SHORT);
+            } 
+            if(state.isConnected){
+                if(this.props.unRecievedMessages.length > 0){
+                    this.props.unRecievedMessages.forEach(item => {
+                            this.postMessage(item);
+                    })
+                    this.props.clearState();
+                }
+            }
+        });
+    }
 
-//         if(index > 0){
-//             if(this.oldDate !== item.date){
-//                 this.setNewDate(item.date);
-//                 flag = true;
-//             }
-//         } else if (index === 0) {
-//             this.setNewDate(item.date);
-//             flag = true;
-//         }
+    public render() {
+        return(
+            <View>
+                <KeyboardAwareScrollView  style={ styles.chatContainer } 
+                innerRef={ref => {
+                    this.scroll = ref
+                }}
+                >              
+                <ScrollView >
+                    <FlatList
+                        horizontal={false}
+                        data={this.state.renderMessages}
+                        renderItem={(item) => this.renderChatMessage(item.item, item.index)}
+                    >
+                    </FlatList>
+                    {this.state.sendingMessage ? (
+                        <View style={styles.sendingMessage}>
+                            <View style={styles.arrowLeft}></View>
+                                <View style={styles.sendingMessageIndicator}>
+                                        <DotIndicator color='rgb(62, 74, 89)' size={6} count={3}/>
+                                </View>
+                        </View>
 
-//         return (
-//             <View style={styles.chatMessage}>
-//                 {flag === true ? (<Text style={styles.centerDate}>{item.date}</Text>) : (null)}
-//                 {item.name !== 'LoginName' ? ( // TODO: Remove LoginName
-//                     <View style={styles.receivedMessageArrow}>
+                    ): ( <View></View>)}
+                </ScrollView> 
+            </KeyboardAwareScrollView>
+            <View  style={styles.inputMessageField}>
+                <View style={styles.inputField}>
+                    <TouchableOpacity>
+                        <Image style={styles.voiceImg} source={require('../../../assets/img/png/chat/voice.png')}></Image>
+                    </TouchableOpacity> 
+                    <TextInput style={styles.input} placeholderTextColor = 'rgb(62, 74, 89)' placeholder={"Type your message…"}>
+                    </TextInput>
+                </View>
+                <TouchableOpacity onPress={() => {this.sendMessage()}}>
+                    <View style={styles.sendMessage}>
+                        <Image style={styles.sendMessageImg} source={require('../../../assets/img/png/chat/sendIcon.png')}></Image> 
+                    </View>
+                </TouchableOpacity>
+            </View>
+        </View>
+        )
+    }
 
-//                             <View style={styles.arrowLeft}></View>
-//                             <View style={styles.receivedMessage}>
+    private setNewDate = (newDate: string): void => {
+        this.oldDate = newDate; // TODO: REMOVE!
+    }
 
-//                                 <Text style={styles.messageItemName}>{item.name}</Text>
-//                                 <Text style={styles.messageItemText}>{item.messageText}</Text>
-//                                 <Text style={styles.messageItemTime}>{item.time}</Text>
-//                             </View>
-//                     </View>
-//                 ) : ( 
-//                     <View style={styles.sentMessageArrow}>
+    private renderChatMessage = (item: ChatMessageModel, index: number) => {
+        let flag = false;
 
-//                         <View style={styles.sentMessage}>
-//                             <View>
-//                                 <Text style={styles.sentMessageItemText}>{item.messageText}</Text>
-//                             </View>
-//                             {item.isReceived && !item.isRead ? (
-//                                 <View style={styles.sentMessageStatus}>
-//                                     <View style={styles.recievedChecked}>
-//                                         <Image style={styles.sentMessageStatusImg} source={require('../../../assets/img/png/chat/checkWhite.png')} />
-//                                     </View>
-//                                 </View>
-//                             ) : (
-//                                 <View></View>
-//                             )}
-//                             {item.isReceived && item.isRead ? (
-//                                 <View style={styles.sentMessageStatus}>
-//                                     <Image style={styles.sentMessageStatusImg} source={require('../../../assets/img/png/chat/checkWhite.png')} />
-//                                     <View style={styles.recievedChecked}>
-//                                         <Image style={styles.sentMessageStatusImg} source={require('../../../assets/img/png/chat/checkWhite.png')} />
-//                                     </View>
-//                                 </View>
-//                             ) : (
-//                                 <View></View>
-//                             )}
-//                             {!item.isReceived ? (
-//                                 <View style={styles.sentMessageStatus}>
-//                                     <View style={styles.recievedChecked}>
-//                                         <Image style={styles.timeIcon} source={require('../../../assets/img/png/chat/time.png')} />
-//                                     </View>
-//                                 </View>
-//                             ):(<View></View>)}
-//                         </View>
-//                         <View style={styles.arrowRight}></View>
-//                     </View>
-//                 )}
-//             </View>
-//         )
-//     }
-// }
+        if(index > 0){
+            if(this.oldDate !== item.date){
+                this.setNewDate(item.date);
+                flag = true;
+            }
+        } else if (index === 0) {
+            this.setNewDate(item.date);
+            flag = true;
+        }
 
-// const mapDispatchToProps = (dispatch: any) => ({
-//     postMessage: (chatMessage: SendedChatMessage) => dispatch(chatActions.sendMessage(chatMessage)),
-//     clearState: () => dispatch(chatActions.clearState()) 
-// });
+        return (
+            <View style={styles.chatMessage}>
+                {flag === true ? (<Text style={styles.centerDate}>{item.date}</Text>) : (null)}
+                {item.name !== 'LoginName' ? ( // TODO: Remove LoginName
+                    <View style={styles.receivedMessageArrow}>
 
-// const mapStateToProps = (state: mapStateToPropsModel) => {
-//     return {
-//         unRecievedMessages: state.chatReducer.unResolvedPromises,
-//     }
-// };
+                            <View style={styles.arrowLeft}></View>
+                            <View style={styles.receivedMessage}>
 
-// export default connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-// )(ChatScreen)
+                                <Text style={styles.messageItemName}>{item.name}</Text>
+                                <Text style={styles.messageItemText}>{item.messageText}</Text>
+                                <Text style={styles.messageItemTime}>{item.time}</Text>
+                            </View>
+                    </View>
+                ) : ( 
+                    <View style={styles.sentMessageArrow}>
+
+                        <View style={styles.sentMessage}>
+                            <View>
+                                <Text style={styles.sentMessageItemText}>{item.messageText}</Text>
+                            </View>
+                            {item.isReceived && !item.isRead ? (
+                                <View style={styles.sentMessageStatus}>
+                                    <View style={styles.recievedChecked}>
+                                        <Image style={styles.sentMessageStatusImg} source={require('../../../assets/img/png/chat/checkWhite.png')} />
+                                    </View>
+                                </View>
+                            ) : (
+                                <View></View>
+                            )}
+                            {item.isReceived && item.isRead ? (
+                                <View style={styles.sentMessageStatus}>
+                                    <Image style={styles.sentMessageStatusImg} source={require('../../../assets/img/png/chat/checkWhite.png')} />
+                                    <View style={styles.recievedChecked}>
+                                        <Image style={styles.sentMessageStatusImg} source={require('../../../assets/img/png/chat/checkWhite.png')} />
+                                    </View>
+                                </View>
+                            ) : (
+                                <View></View>
+                            )}
+                            {!item.isReceived ? (
+                                <View style={styles.sentMessageStatus}>
+                                    <View style={styles.recievedChecked}>
+                                        <Image style={styles.timeIcon} source={require('../../../assets/img/png/chat/time.png')} />
+                                    </View>
+                                </View>
+                            ):(<View></View>)}
+                        </View>
+                        <View style={styles.arrowRight}></View>
+                    </View>
+                )}
+            </View>
+        )
+    }
+}
+
+const mapDispatchToProps = {
+    postMessage: (chatMessage: SendedChatMessage) => chatActions.sendMessage(chatMessage),
+    clearState: () => chatActions.clearState() 
+};
+
+const mapStateToProps = (state: mapStateToPropsModel) => {
+    return {
+        unRecievedMessages: state.chatReducer.unResolvedPromises,
+    }
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ChatScreen)
   

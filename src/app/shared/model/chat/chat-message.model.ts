@@ -22,7 +22,7 @@ export interface SendedChatMessage {
 
 export interface ChatMessageResponse {
     messageId: number;
-    uuid?: string;
+    uuid: string;
     success: boolean;
     message: string;
     statusCode: number;

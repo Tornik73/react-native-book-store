@@ -9,11 +9,10 @@ function* handleProfileRequest(user: UserModel) {
 
     try {
         const response: PutUserSuccess | PutUserError = yield call(AccountService.putUser, user);
-        console.log(response);
         if((response as PutUserError).error){
             yield put(putUserFailed((response as PutUserError).error));
         } else {
-            yield put(putUserSuccess());
+            yield put(putUserSuccess(user.img));
         }
     }
     catch(err) {

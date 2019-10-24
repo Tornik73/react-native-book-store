@@ -1,13 +1,11 @@
-import { UserActionsEnum } from "../../shared/enums/"
+import { UserActionsEnum } from "../../shared/enums"
 import { BookService } from '../../services/Book.service';
 import { AuthorsBooksModel } from "src/app/shared/model";
 
 export function getAllBooks() {
-    return async (dispatch: any) => {
-        await BookService.getAllBooks()
-            .then((response) => dispatch(getAllBooksSuccess(response))).
-            catch((err) => console.error(err));
-    }
+  return {
+      type: UserActionsEnum.GET_ALL_BOOKS_REQUEST
+  }
 }
 
 export function getAllBooksSuccess(response: AuthorsBooksModel) {

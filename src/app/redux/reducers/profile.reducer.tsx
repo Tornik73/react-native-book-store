@@ -1,6 +1,5 @@
 import { AuthActionEnum, UserActionsEnum } from '../../shared/enums/';
 import { ProfileReducerState } from 'src/app/shared/model';
-import AsyncStorage from '@react-native-community/async-storage';
 
 const INIT_STATE: ProfileReducerState = {
     profileImg: '',
@@ -8,14 +7,9 @@ const INIT_STATE: ProfileReducerState = {
     booksResponse: []
 }
 
-export default async function profileReducer(state = INIT_STATE, action: any) {
-    console.log('PROFILE REDUCER', action.type);
+export default function profileReducer(state = INIT_STATE, action: any) {
     switch (action.type) {
         case UserActionsEnum.PUT_USER_SUCCESS:
-            let img = await AsyncStorage.getItem('img');
-            if(img) {
-                state.profileImg = img;
-            }
             return {
                 ...state,
             }
@@ -24,11 +18,8 @@ export default async function profileReducer(state = INIT_STATE, action: any) {
                 error: action.error,
                 ...state,
             }
-        case UserActionsEnum.PROFILE_IMAGE_CHANGED: 
-            img = await AsyncStorage.getItem('img');
-            if(img) {
-                state.profileImg = img;
-            }
+        case UserActionsEnum.PROFILE_IMAGE_CHANGED:
+            state.profileImg = action.img; 
             return {
                 ...state,
             }
@@ -37,6 +28,11 @@ export default async function profileReducer(state = INIT_STATE, action: any) {
             return {
                 ...state,
             }
+        case UserActionsEnum.GET_ALL_BOOKS_REQUEST: {
+            return {
+                ...state,
+            }
+        }  
         case UserActionsEnum.GET_ALL_BOOKS_SUCCESS:
             state.booksResponse = action.responseToState;
             return {

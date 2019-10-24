@@ -12,5 +12,5 @@ export interface UserModel {
     country: string;
     gender: string;
     isAdmin: boolean;
-    img: string | null;
+    img: string;
 }

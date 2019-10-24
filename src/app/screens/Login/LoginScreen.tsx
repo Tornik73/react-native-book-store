@@ -11,7 +11,7 @@ import {GoogleAuth, GoogleConfigure} from '../../util/googleAuth/googleAuth';
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   login: () => void;
-  updateFooterImage: () => void,
+  updateFooterImage: (img: string) => void,
   loadingStart: () => void,
   loadingEnd: () => void,
   token: string, 
@@ -50,7 +50,7 @@ class LoginScreen extends Component<Props, State> {
           const token = await AsyncStorage.getItem('token');
           const img = await AsyncStorage.getItem('img');
           if (token !== null && img !== null) {
-            this.props.updateFooterImage();
+            this.props.updateFooterImage(img);
             this.props.loadingEnd();
             this.props.navigation.navigate('Home');
           }
@@ -151,7 +151,7 @@ class LoginScreen extends Component<Props, State> {
 
 const mapDispatchToProps = { 
   login: () => loginActions.loginRequest(),
-  updateFooterImage: () => profileActions.profileImageChanged(),
+  updateFooterImage: (img: string) => profileActions.profileImageChanged(img),
   loadingStart: () => loginActions.startLoading(),
   loadingEnd: () => loginActions.endLoading()
 };

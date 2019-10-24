@@ -7,8 +7,8 @@ import chatReducer from './chat.reducer';
 
 export const reducers = combineReducers({
     homeReducer,
-    profileReducer,
     authReducer,
+    profileReducer,
     chatReducer
 });
 

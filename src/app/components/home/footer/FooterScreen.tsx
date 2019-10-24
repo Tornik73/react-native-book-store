@@ -5,7 +5,7 @@ import { FooterItemsEnum } from "../../../shared/enums/footer-items.enum";
 import style from "./style"; 
 import { connect } from "react-redux";
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation";
-import { MenuItemModel } from "../../../shared/model/";
+import { MenuItemModel, AuthReducerState, ProfileReducerState } from "../../../shared/model/";
 import * as loginActions from "../../../redux/actions/auth.actions";
 
 interface Props {
@@ -18,6 +18,13 @@ interface Props {
 interface State {
     menu: MenuItemModel[];
 }
+
+interface mapStateToPropsModel {
+    authReducer: AuthReducerState;
+    profileReducer: ProfileReducerState;
+}
+  
+
 class FooterComponent extends Component<Props, State>{
 
     constructor(props: Props){
@@ -45,6 +52,7 @@ class FooterComponent extends Component<Props, State>{
         if (this.props.isLogined && !this.props.isLoading){
             if(navigation.isFocused(item.name)){
                 if(item.name === FooterItemsEnum.PROFILE){
+
                     return (
                         <View style={style.item}>
                             <Image style={style.itemImage} source={{uri: this.props.profileImg}} ></Image>
@@ -86,15 +94,15 @@ class FooterComponent extends Component<Props, State>{
 }
 
 const mapDispatchToProps = {
-    loadingStart: () => loginActions.startLoading()
+    // loadingStart: () => loginActions.startLoading()
 };
-  const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: mapStateToPropsModel) => {
     return {
         isLogined: state.authReducer.isLogined,
         profileImg: state.profileReducer.profileImg,
         isLoading: state.authReducer.isLoading
     }
-  };
+};
   
 export default connect(
     mapStateToProps,
