@@ -1,31 +1,35 @@
 import { AccountService } from "../../services/account.service";
 import { UserActionsEnum } from "../../shared/enums/";
 import { UserModel } from "src/app/shared/model";
+import { PutUserError } from "src/app/shared/model/user/user-profile.models";
 
-export function updateUser(user: UserModel) {
-    return async (dispatch: any) => {
-        await AccountService.
-        putUser(user).
-            then((response) => dispatch(putSuccess())).
-            catch((err) => console.error(err + 'Error in PUT request'));
+export function updateUserRequest(user: UserModel) {
+    return {
+        type: UserActionsEnum.PUT_USER_REQUEST, 
+        ...user
     }
 }
 
-export function putSuccess() {
+export function putUserSuccess() {
     return {
         type: UserActionsEnum.PUT_USER_SUCCESS,
     }
 }
-
-export function updateProfileImage (newFooterImg: string) {
-    return (dispatch: any) => {
-            dispatch(profileImageChanged(newFooterImg));
-
+export function putUserFailed(error: PutUserError | string) {
+    return {
+        error: error,
+        type: UserActionsEnum.PUT_USER_FAILED,
     }
 }
-export function profileImageChanged(img: string) {
+
+export function profileImageChanged() {
     return {
-        profileImg: img,
         type: UserActionsEnum.PROFILE_IMAGE_CHANGED
     }
 }
+
+// export function updateProfileImage (newFooterImg: string) {
+//     return (dispatch: any) => {
+//             dispatch(profileImageChanged(newFooterImg));
+//     }
+// }

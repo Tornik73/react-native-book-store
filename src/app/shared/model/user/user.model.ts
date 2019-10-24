@@ -1,4 +1,7 @@
+import { UserActionsEnum } from "../../enums";
+
 export interface UserModel {
+    // type?: UserActionsEnum,
     id: number | null;
     email: string;
     name: string;

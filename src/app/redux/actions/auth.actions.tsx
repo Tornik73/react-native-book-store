@@ -1,32 +1,29 @@
 import { AccountService } from "../../services/account.service"
 import { environment } from "../../environments/environment"
+import {action} from 'typesafe-actions';
 import { AuthActionEnum, UserActionsEnum } from "../../shared/enums/"
+import LoginRequestSagaModel from "src/app/shared/model/auth/auth-saga.model";
 
-export function login() {
-    return async (dispatch: any) => {
-        await AccountService.
-            login(environment.hardcodeData.login, environment.hardcodeData.password)
-            .then((response) => dispatch(loginSuccess(response.img))).
-            catch((err) => console.log(err));
-    }
-}
-export function loginSuccess(img: string) {
+
+export const loginRequest = () => {
     return {
-        img: img,
+        type: AuthActionEnum.LOGIN_EMAIL_REQUEST, 
+        ...environment.hardcodeData
+    }
+};
+export function loginSuccess() {
+    return {
         type: AuthActionEnum.LOGIN_SUCCESS,
     }
 }
 
-export function loadingStart() {
-    return async (dispatch: any) => {
-             dispatch(startLoading())
+export function loginFailed(error: any) {
+    return {
+        error: error,
+        type: AuthActionEnum.LOGIN_FAILED,
     }
 }
-export function loadingEnd() {
-    return async (dispatch: any) => {
-             dispatch(endLoading())
-    }
-}
+
 export function endLoading() {
     return {
         type: AuthActionEnum.LOADING_END,
@@ -38,8 +35,6 @@ export function startLoading() {
         type: AuthActionEnum.LOADING_START,
     }
 }
-
-
 export function logout() {
     return async (dispatch: any) => {
         await AccountService.

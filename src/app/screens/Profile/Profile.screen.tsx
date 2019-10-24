@@ -192,11 +192,11 @@ class ProfileScreen extends Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => ({
-  logout: () => dispatch(loginActions.logout()),
-  putRequest: (user: UserModel) => dispatch(profileActions.updateUser(user)),
-  profileImageChange: (img: string) => dispatch(profileActions.updateProfileImage(img))
-});
+const mapDispatchToProps = {
+  logout: () => loginActions.logout(),
+//   putRequest: (user: UserModel) => dispatch(profileActions.updateUser(user)),
+//   profileImageChange: (img: string) => dispatch(profileActions.updateProfileImage(img))
+};
 
 const mapStateToProps = (state: mapStateToPropsModel ) => {
   return {

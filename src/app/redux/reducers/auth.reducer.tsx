@@ -1,16 +1,27 @@
 import { AuthActionEnum } from '../../shared/enums/'
+import { AuthReducerState } from '../../../app/shared/model';
 
-const INIT_STATE = {
+const INIT_STATE: AuthReducerState = {
     isLogined: false,
     isLoading: false,
 }
 
 export default function authReducer(state = INIT_STATE, action: any) {
     switch (action.type) {
+        case AuthActionEnum.LOGIN_EMAIL_REQUEST: {
+            return {
+                ...state,
+            }
+        }
         case AuthActionEnum.LOGIN_SUCCESS:
             return {
                 ...state,
                 isLogined: true
+            }
+        case AuthActionEnum.LOGIN_FAILED:
+            return {
+                error: action.error,
+                isLogined: false
             }
         case AuthActionEnum.LOGOUT:
             return {

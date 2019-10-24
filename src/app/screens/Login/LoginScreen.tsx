@@ -10,12 +10,10 @@ import {GoogleAuth, GoogleConfigure} from '../../util/googleAuth/googleAuth';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
-  
-  login: () => void,
-  changeFooterImage: (img: string) => void,
+  login: () => void;
+  updateFooterImage: () => void,
   loadingStart: () => void,
   loadingEnd: () => void,
-
   token: string, 
   isLoad: boolean;
   isLogined: boolean,
@@ -44,15 +42,15 @@ class LoginScreen extends Component<Props, State> {
 
   public onLogin() {
       this.props.login();
-      this.props.loadingStart();
+      // this.props.loadingStart();
 
       try {
-        setTimeout(async ()=> {
+        setTimeout(async ()=> { // TODO: REMOVE
 
           const token = await AsyncStorage.getItem('token');
           const img = await AsyncStorage.getItem('img');
           if (token !== null && img !== null) {
-            this.props.changeFooterImage(img);
+            this.props.updateFooterImage();
             this.props.loadingEnd();
             this.props.navigation.navigate('Home');
           }
@@ -98,6 +96,7 @@ class LoginScreen extends Component<Props, State> {
       // }
     });
   };
+
   render() {
 
     return (
@@ -150,12 +149,12 @@ class LoginScreen extends Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => ({
-  login: () => dispatch(loginActions.login()),
-  changeFooterImage: (img: string) => dispatch(profileActions.updateProfileImage(img)),
-  loadingStart: () => dispatch(loginActions.loadingStart()),
-  loadingEnd: () => dispatch(loginActions.loadingEnd())
-});
+const mapDispatchToProps = { 
+  login: () => loginActions.loginRequest(),
+  updateFooterImage: () => profileActions.profileImageChanged(),
+  loadingStart: () => loginActions.startLoading(),
+  loadingEnd: () => loginActions.endLoading()
+};
 
 const mapStateToProps = (state: any) => {
   return {
@@ -166,5 +165,5 @@ const mapStateToProps = (state: any) => {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(LoginScreen)

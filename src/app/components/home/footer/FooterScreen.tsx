@@ -85,10 +85,9 @@ class FooterComponent extends Component<Props, State>{
 
 }
 
-const mapDispatchToProps = (dispatch: any) => ({
-    loadingStart: () => dispatch(loginActions.loadingStart())
-
-});
+const mapDispatchToProps = {
+    loadingStart: () => loginActions.startLoading()
+};
   const mapStateToProps = (state: any) => {
     return {
         isLogined: state.authReducer.isLogined,
