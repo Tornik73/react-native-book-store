@@ -5,7 +5,7 @@ import { NavigationScreenProp, NavigationState, NavigationParams, ScrollView, Fl
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { DotIndicator } from '../../components/DotIndicators/index';
 import { ToastAndroid } from 'react-native';
-import { ChatMessageModel, SendedChatMessage, ChatMessageResponse, ChatReducerState } from '../../shared/model/';
+import { ChatMessageModel, SendedChatMessage, ChatMessageResponse, ChatReducerState } from '../../shared/model';
 import { connect } from 'react-redux';
 import * as chatActions from '../../redux/actions/chat.actions';
 import UUIDGenerator from 'react-native-uuid-generator';
@@ -73,12 +73,10 @@ class ChatScreen extends Component<Props, State> {
         });
 
         // TODO: scroll to end need to be async
-        setTimeout(() => {
             this.scroll.props.scrollToEnd(true);
             this.setState({ 
                 refresh: !this.state.refresh
             });
-        }, 200)
 
         // Change status when message will read
     }

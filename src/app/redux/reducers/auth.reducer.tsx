@@ -32,8 +32,12 @@ export default function authReducer(state = INIT_STATE, action: LoginActionTypes
             }
         }
         case AuthActionEnum.LOGIN_SUCCESS:
+
             const USER: UserModel = jwt(action.data.token);
+            AsyncStorage.setItem(AsyncStorageEnum.TOKEN, action.data.token);
+            AsyncStorage.setItem(AsyncStorageEnum.IMG, action.data.img);
             USER.img = action.data.img;
+
             return {
                 ...state,
                 isLogined: true,

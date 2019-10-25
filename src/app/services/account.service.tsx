@@ -31,20 +31,22 @@ export const AccountService = {
         return response;    
     },
     putUser: async (user: UserModel): Promise<PutUserSuccess | PutUserError> => {
+        
         const response = await AxiosInstance
             .put<PutUserSuccess | PutUserError>(`${environment.apiUrl}users/${user.id}`, {...user})
                 .then(response => response.data)
                 .catch(error => console.log(error));
-        if((response as PutUserSuccess).success && user.id){
+
+        if((response as PutUserSuccess).success && user.id) {
             const serverGetResponse = await AccountService.getUserById(user.id)
                 .then((response) => response)
                 .catch(error => console.error(error));
                 if(serverGetResponse && serverGetResponse.img){
-                    // AsyncStorage.setItem('currentUser', JSON.stringify(response));     
                     AsyncStorage.setItem(AsyncStorageEnum.IMG, serverGetResponse.img);
                 }
                 return response as PutUserSuccess;
         }
+
         return response as PutUserError;
     },
 };

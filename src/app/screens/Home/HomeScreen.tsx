@@ -74,8 +74,6 @@ class HomeScreen extends Component<Props, State> {
 
   public render() {
     return(
-        // <SafeAreaView>
-
           <ScrollView
             refreshControl={
               <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.getAllBooks()} />
@@ -85,7 +83,6 @@ class HomeScreen extends Component<Props, State> {
                 <View></View>)
             }
           </ScrollView>
-        // </SafeAreaView>
     )
   }
 }

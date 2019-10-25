@@ -4,6 +4,7 @@ import { takeEvery, all, fork, call, put } from "@redux-saga/core/effects";
 import { AccountService } from "../../../app/services";
 import { loginFailed, loginSuccess } from "../actions/auth.actions";
 import { LoginError, LoginSuccess } from "src/app/shared/model/auth/login.model";
+import NavigationService from "../../services/navigation.service";
 
 function* handleLoginRequest(data: LoginRequestSagaModel) {
 
@@ -13,7 +14,9 @@ function* handleLoginRequest(data: LoginRequestSagaModel) {
         if((response as LoginError).message){
             yield put(loginFailed((response as LoginError).message));
         } else {
+
             yield put(loginSuccess((response as LoginSuccess).img, (response as LoginSuccess).token));
+            yield call(NavigationService.navigate, 'Home', {});
         }
     } catch(err) {
         if (err instanceof Error) {

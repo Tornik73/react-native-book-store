@@ -99,7 +99,7 @@ const mapDispatchToProps = {
 const mapStateToProps = (state: mapStateToPropsModel) => {
     return {
         isLogined: state.authReducer.isLogined,
-        profileImg: state.profileReducer.profileImg,
+        profileImg: state.authReducer.userState.img,
         isLoading: state.authReducer.isLoading
     }
 };

@@ -11,7 +11,6 @@ export class BookService extends Component<Props, State> {
         const response = await Axios.get<AuthorsBooksModel>(`${environment.apiUrl}books/`)
                         .then(response => response.data)
                         .catch(err => err);
-        // console.log(response);
         return response;
     }
 }

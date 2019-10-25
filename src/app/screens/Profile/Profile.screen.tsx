@@ -103,18 +103,12 @@ class ProfileScreen extends Component<Props, State> {
     });
   }
 
-  public logOut(): void {
-    this.props.logout();
-  }
-
   render() {
-   const { profileUserState, profileImg } = this.props;
+   const { profileUserState, profileImg, logout } = this.props;
     return (
       <ScrollView>
         <View>
-          { profileImg && (
             <Image style={styles.avatar} source={{uri: this.state.profileImage}}/>
-          )}
 
           {this.state.editMode &&
            <View style={styles.choosePhoto}>
@@ -138,7 +132,7 @@ class ProfileScreen extends Component<Props, State> {
               <Text style={styles.info}>{profileUserState.name} {profileUserState.lastname} / {profileUserState.country} </Text>
               <Text style={styles.description}>Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum electram expetendis, omittam deseruisse consequuntur ius an,</Text>
                 
-              <TouchableOpacity style={styles.buttonContainer} onPress={() => this.logOut()}>
+              <TouchableOpacity style={styles.buttonContainer} onPress={() => logout()}>
                 <Text>Log out</Text>  
               </TouchableOpacity>    
               <Base64Component />

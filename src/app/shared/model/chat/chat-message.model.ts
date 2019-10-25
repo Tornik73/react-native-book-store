@@ -3,10 +3,10 @@ export interface ChatMessageModel {
     uuid: string | null;
     name: string;
     messageText: string;
-    time: string; // TODO: Change on Date type
+    time: string; 
     isRead: boolean;
     isReceived: boolean;
-    date: string; // TODO: Change on Date type
+    date: string;
 }
 
 export interface SendedChatMessage {
@@ -16,8 +16,8 @@ export interface SendedChatMessage {
     messageText: string;
     isRead: boolean;
     isReceived: boolean;
-    time: string; // TODO: Change on Date type
-    date: string; // TODO: Change on Date type
+    time: string; 
+    date: string;
 }
 
 export interface ChatMessageResponse {

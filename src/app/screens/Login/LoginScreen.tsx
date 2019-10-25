@@ -5,19 +5,20 @@ import { NavigationScreenProp, NavigationState, NavigationParams } from "react-n
 import styles from './styles';
 import * as loginActions from "../../redux/actions/auth.actions";
 import * as profileActions from '../../redux/actions/profile.actions';
-import AsyncStorage from '@react-native-community/async-storage';
 import {GoogleAuth, GoogleConfigure} from '../../util/googleAuth/googleAuth';
-import { AuthReducerState, ProfileReducerState } from '../../../app/shared/model';
+import { AuthReducerState, ProfileReducerState } from '../../shared/model';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+
   login: () => void;
-  updateFooterImage: (img: string) => void,
-  loadingStart: () => void,
-  loadingEnd: () => void,
-  token: string, 
+  updateFooterImage: (img: string) => void;
+  loadingStart: () => void;
+  loadingEnd: () => void;
+
+  userImg: string;
   isLoad: boolean;
-  isLogined: boolean,
+  isLogined: boolean;
 }
 
 interface State {
@@ -25,7 +26,7 @@ interface State {
   password: string;
 }
 
-interface mapDispatchToProps {
+interface MapStateToProps {
   authReducer: AuthReducerState;
   profileReducer: ProfileReducerState;
 }
@@ -45,23 +46,13 @@ class LoginScreen extends Component<Props, State> {
   componentDidMount() {
     GoogleConfigure();
   }
-
-  public async onLogin(): Promise<void> {
+  
+  public onLogin(): void {
       this.props.login();
-
-      try {
-          const token = await AsyncStorage.getItem('token');
-          const img = await AsyncStorage.getItem('img');
-          if (token !== null && img !== null) {
-            this.props.updateFooterImage(img);
-            this.props.loadingEnd();
-            this.props.navigation.navigate('Home');
-          }
-      }
-      catch (error) {
-        console.error(error);
-      }
+      this.props.updateFooterImage(this.props.userImg);
+      this.props.loadingEnd();
   }
+
 
   public loginGoogle = (): void => {
     // TODO: GOOGLE AUTH LOGIC
@@ -128,8 +119,9 @@ const mapDispatchToProps = {
   loadingEnd: () => loginActions.endLoading()
 };
 
-const mapStateToProps = (state: mapDispatchToProps) => {
+const mapStateToProps = (state: MapStateToProps) => {
   return {
+      userImg: state.authReducer.userState.img,
       isLogined: state.authReducer.isLogined,
       img: state.profileReducer.profileImg,
   }
