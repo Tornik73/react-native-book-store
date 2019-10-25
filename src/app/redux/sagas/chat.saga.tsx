@@ -4,7 +4,7 @@ import { SendedChatMessage, ChatMessageResponse } from "src/app/shared/model";
 import { sendMessageSuccess, sendMessageFailed } from "../actions/chat.actions";
 import { ChatService } from "../../../app/services";
 
-export function* handleChatRequest(sendedMessage: SendedChatMessage) {
+function* handleChatRequest(sendedMessage: SendedChatMessage) {
 
     try {
         const response: ChatMessageResponse = yield call(ChatService.sendMessage, sendedMessage);

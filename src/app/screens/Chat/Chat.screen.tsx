@@ -14,7 +14,7 @@ import NetInfo from "@react-native-community/netinfo";
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
     postMessage: (sendedChatMessage: SendedChatMessage) => ChatMessageModel;
-    clearState: () => void;
+    clearUnReceivedMessageState: () => void;
     unRecievedMessages: ChatMessageModel[];
     renderedChatMessages: ChatMessageModel[];
 }
@@ -57,22 +57,22 @@ class ChatScreen extends Component<Props, State> {
 
     componentDidMount(){
         this.subscribeToNetworkState();
-        //TODO: this.unSubscribeFromNetworkState();
+        // TODO: this.unSubscribeFromNetworkState();
     }
+
     private sendMessage = (): void => {
 
         // Change status when message will recieved
         UUIDGenerator.getRandomUUID((uuid) => {
             chatMessage.uuid = uuid;
             chatMessage.messageText = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-            // this.pushMessageToState(chatMessage);
             this.props.postMessage(chatMessage);
         });
         this.setState({ 
             refresh: !this.state.refresh
         });
 
-        //TODO: scroll to end need to be async
+        // TODO: scroll to end need to be async
         setTimeout(() => {
             this.scroll.props.scrollToEnd(true);
             this.setState({ 
@@ -103,6 +103,8 @@ class ChatScreen extends Component<Props, State> {
     }
 
     public render() {
+        const { renderedChatMessages } = this.props;
+        const { refresh } = this.state;
         return(
             <View>
                 <KeyboardAwareScrollView  style={ styles.chatContainer } 
@@ -113,8 +115,8 @@ class ChatScreen extends Component<Props, State> {
                 <ScrollView >
                     <FlatList
                         horizontal={false}
-                        data={this.props.renderedChatMessages}
-                        extraData={this.state.refresh}
+                        data={renderedChatMessages}
+                        extraData={refresh}
                         renderItem={(item) => this.renderChatMessage(item.item, item.index)}
                     >
                     </FlatList>
@@ -148,7 +150,7 @@ class ChatScreen extends Component<Props, State> {
     }
 
     private setNewDate = (newDate: string): void => {
-        this.oldDate = newDate; // TODO: REMOVE!
+        this.oldDate = newDate;
     }
 
     private renderChatMessage = (item: ChatMessageModel, index: number) => {
@@ -222,7 +224,7 @@ class ChatScreen extends Component<Props, State> {
 
 const mapDispatchToProps = {
     postMessage: (chatMessage: SendedChatMessage) => chatActions.sendMessage(chatMessage),
-    clearState: () => chatActions.clearState() 
+    clearUnReceivedMessageState: () => chatActions.clearUnReceivedMessageState() 
 };
 
 const mapStateToProps = (state: mapStateToPropsModel) => {

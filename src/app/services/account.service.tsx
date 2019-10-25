@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { UserModel } from "../shared/model";
 import AxiosInstance from "../core/interceptors/axios.instance";
 import { PutUserSuccess, PutUserError } from "../shared/model/user/user-profile.models";
+import { AsyncStorageEnum } from "../shared/enums/async-storage.enum";
 export const AccountService = {
     login: async (login: string, password: string): Promise<LoginSuccess | LoginError> => {
         const response = await Axios.post<LoginSuccess | LoginError>(`${environment.apiUrl}authenticate/`, 
@@ -16,8 +17,8 @@ export const AccountService = {
             .catch(error => console.log(error));
 
         if(response as LoginSuccess) {
-            AsyncStorage.setItem('token', (response as LoginSuccess).token);
-            AsyncStorage.setItem('img', (response as LoginSuccess).img);
+            AsyncStorage.setItem(AsyncStorageEnum.TOKEN, (response as LoginSuccess).token);
+            AsyncStorage.setItem(AsyncStorageEnum.IMG, (response as LoginSuccess).img);
             return response as LoginSuccess;
         }
         return response as LoginError;
@@ -29,10 +30,6 @@ export const AccountService = {
             })
         return response;    
     },
-    logout: async (): Promise<any> => {
-        await AsyncStorage.removeItem('token');
-        return await AsyncStorage.removeItem('img');
-    },
     putUser: async (user: UserModel): Promise<PutUserSuccess | PutUserError> => {
         const response = await AxiosInstance
             .put<PutUserSuccess | PutUserError>(`${environment.apiUrl}users/${user.id}`, {...user})
@@ -43,8 +40,8 @@ export const AccountService = {
                 .then((response) => response)
                 .catch(error => console.error(error));
                 if(serverGetResponse && serverGetResponse.img){
-                    AsyncStorage.setItem('currentUser', JSON.stringify(response));     
-                    AsyncStorage.setItem('img', serverGetResponse.img);
+                    // AsyncStorage.setItem('currentUser', JSON.stringify(response));     
+                    AsyncStorage.setItem(AsyncStorageEnum.IMG, serverGetResponse.img);
                 }
                 return response as PutUserSuccess;
         }

@@ -7,3 +7,4 @@ export * from './profile-reducer-state.model';
 export * from './auth/auth-reducer-state.model';
 export * from './chat/chat-message.model';
 export * from './chat/chat-reducer-state.model';
+export * from './books/books-reducer-state.model';

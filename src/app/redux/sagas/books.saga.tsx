@@ -1,4 +1,4 @@
-import { UserActionsEnum } from "../../../app/shared/enums";
+import { BooksActionEnum } from "../../../app/shared/enums";
 import { takeEvery, all, fork, call, put } from "@redux-saga/core/effects";
 import { BookService } from "../../../app/services";
 import { getAllBooksSuccess } from "../actions/books.actions";
@@ -8,7 +8,7 @@ function* handleBooksRequest() {
 
     try {
         const response: AuthorsBooksModel = yield call(BookService.getAllBooks);
-        yield put(getAllBooksSuccess(response));
+        yield put(getAllBooksSuccess(response)); // TODO!!!!
         // if((response as BooksError).error){
         //     yield put(book((response as BooksSuccess).error));
         // } else {
@@ -24,7 +24,7 @@ function* handleBooksRequest() {
 }
 
 function* watchLoginReqest() {
-    yield takeEvery(UserActionsEnum.GET_ALL_BOOKS_REQUEST, handleBooksRequest);
+    yield takeEvery(BooksActionEnum.GET_ALL_BOOKS_REQUEST, handleBooksRequest);
 }
 
 function* BooksSaga() {

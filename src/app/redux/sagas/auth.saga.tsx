@@ -5,15 +5,15 @@ import { AccountService } from "../../../app/services";
 import { loginFailed, loginSuccess } from "../actions/auth.actions";
 import { LoginError, LoginSuccess } from "src/app/shared/model/auth/login.model";
 
-function* handleLoginReqest(data: LoginRequestSagaModel) {
+function* handleLoginRequest(data: LoginRequestSagaModel) {
 
     try {
         const response: LoginSuccess | LoginError = yield call(AccountService.login, data.login, data.password);
 
-        if((response as LoginError).error){
-            yield put(loginFailed((response as LoginError).error));
+        if((response as LoginError).message){
+            yield put(loginFailed((response as LoginError).message));
         } else {
-            yield put(loginSuccess());
+            yield put(loginSuccess((response as LoginSuccess).img, (response as LoginSuccess).token));
         }
     } catch(err) {
         if (err instanceof Error) {
@@ -25,7 +25,7 @@ function* handleLoginReqest(data: LoginRequestSagaModel) {
 }
 
 function* watchLoginReqest() {
-    yield takeEvery(AuthActionEnum.LOGIN_EMAIL_REQUEST, handleLoginReqest);
+    yield takeEvery(AuthActionEnum.LOGIN_EMAIL_REQUEST, handleLoginRequest);
 }
 
 function* LoginSaga() {

@@ -1,6 +1,5 @@
-import { ChatService } from "../../services/";
 import { ChatActionsEnum } from "../../shared/enums/";
-import { SendedChatMessage, ChatMessageResponse } from "../../shared/model";
+import { SendedChatMessage } from "../../shared/model";
 
 export function sendMessage(sendedMessage: SendedChatMessage) {
     return {
@@ -23,9 +22,9 @@ export function sendMessageFailed(err: any = null, sendedMessage: SendedChatMess
     }
 }
 
-export function clearState() {
+export function clearUnReceivedMessageState() {
     return {
-        type: ChatActionsEnum.CLEAR_STATE,
+        type: ChatActionsEnum.CLEAR_UNRECEIVED_MESSAGE_STATE,
     }
 }
 

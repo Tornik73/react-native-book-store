@@ -1,8 +1,6 @@
-import { AccountService } from "../../services/account.service";
 import { UserActionsEnum } from "../../shared/enums/";
 import { UserModel } from "src/app/shared/model";
 import { PutUserError } from "src/app/shared/model/user/user-profile.models";
-import AsyncStorage from "@react-native-community/async-storage";
 
 export function updateUserRequest(user: UserModel) {
     return {
@@ -12,8 +10,9 @@ export function updateUserRequest(user: UserModel) {
 }
 
 export function putUserSuccess(img: string = '') {
-    profileImageChanged(img);
+
     return {
+        img: img,
         type: UserActionsEnum.PUT_USER_SUCCESS,
     }
 }
@@ -28,5 +27,11 @@ export function profileImageChanged(img: string = '') {
     return {
         img: img,
         type: UserActionsEnum.PROFILE_IMAGE_CHANGED
+    }
+}
+
+export function profileClearImage() {
+    return {
+        type: UserActionsEnum.PROFILE_LOGOUT_CLEAR_IMAGE
     }
 }

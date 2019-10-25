@@ -1,18 +1,5 @@
 import { StyleSheet } from 'react-native';
 
-function elevationShadowStyle(elevation:any) {
-    return {
-        elevation,
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.18,
-        shadowRadius: 1.00,
-
-    };
-}
-
 export default StyleSheet.create({
     container: {
         display: 'flex',

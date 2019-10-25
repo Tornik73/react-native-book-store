@@ -7,6 +7,7 @@ import * as loginActions from "../../redux/actions/auth.actions";
 import * as profileActions from '../../redux/actions/profile.actions';
 import AsyncStorage from '@react-native-community/async-storage';
 import {GoogleAuth, GoogleConfigure} from '../../util/googleAuth/googleAuth';
+import { AuthReducerState, ProfileReducerState } from '../../../app/shared/model';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -22,6 +23,11 @@ interface Props {
 interface State {
   username: string;
   password: string;
+}
+
+interface mapDispatchToProps {
+  authReducer: AuthReducerState;
+  profileReducer: ProfileReducerState;
 }
 
 class LoginScreen extends Component<Props, State> {
@@ -40,13 +46,10 @@ class LoginScreen extends Component<Props, State> {
     GoogleConfigure();
   }
 
-  public onLogin() {
+  public async onLogin(): Promise<void> {
       this.props.login();
-      // this.props.loadingStart();
 
       try {
-        setTimeout(async ()=> { // TODO: REMOVE
-
           const token = await AsyncStorage.getItem('token');
           const img = await AsyncStorage.getItem('img');
           if (token !== null && img !== null) {
@@ -54,46 +57,15 @@ class LoginScreen extends Component<Props, State> {
             this.props.loadingEnd();
             this.props.navigation.navigate('Home');
           }
-
-        }, 1000)
       }
       catch (error) {
         console.error(error);
       }
   }
 
-  public loginGoogle = () => {
+  public loginGoogle = (): void => {
+    // TODO: GOOGLE AUTH LOGIC
     GoogleAuth().then((res: any)  => {
-      // if (res.idToken) {
-      //   this.props.loginGoogleRequest(
-      //     res.idToken,
-      //     () => {
-      //       this.queueProcess = this.goHome;
-      //       this.setupFirebase();
-      //       this.props.setLoadingLogin(false);
-      //     },
-      //     error => {
-      //       this.props.setLoadingLogin(false);
-      //       this.queueProcess = () => alert.show('Invalid Google Token!');
-      //     },
-      //   );
-      // } else {
-      //   switch (res) {
-      //     case 'cancel':
-      //       this.queueProcess = () => alert.show('Cancelled!');
-      //       break;
-      //     case 'progress':
-      //       this.queueProcess = () => alert.show('Still in progress');
-      //       break;
-      //     case 'ps_not_available':
-      //       this.queueProcess = () =>
-      //         alert.show('Google play services not available!');
-      //       break;
-      //     default:
-      //       break;
-      //   }
-
-      // }
     });
   };
 
@@ -156,7 +128,7 @@ const mapDispatchToProps = {
   loadingEnd: () => loginActions.endLoading()
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: mapDispatchToProps) => {
   return {
       isLogined: state.authReducer.isLogined,
       img: state.profileReducer.profileImg,

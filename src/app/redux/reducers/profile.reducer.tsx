@@ -1,15 +1,14 @@
-import { AuthActionEnum, UserActionsEnum } from '../../shared/enums/';
+import { UserActionsEnum } from '../../shared/enums/';
 import { ProfileReducerState } from 'src/app/shared/model';
 
 const INIT_STATE: ProfileReducerState = {
     profileImg: '',
-    response: null,
-    booksResponse: []
 }
 
 export default function profileReducer(state = INIT_STATE, action: any) {
     switch (action.type) {
         case UserActionsEnum.PUT_USER_SUCCESS:
+            state.profileImg = action.img;
             return {
                 ...state,
             }
@@ -25,16 +24,6 @@ export default function profileReducer(state = INIT_STATE, action: any) {
             }
         case UserActionsEnum.PROFILE_LOGOUT_CLEAR_IMAGE: 
             state.profileImg = '';
-            return {
-                ...state,
-            }
-        case UserActionsEnum.GET_ALL_BOOKS_REQUEST: {
-            return {
-                ...state,
-            }
-        }  
-        case UserActionsEnum.GET_ALL_BOOKS_SUCCESS:
-            state.booksResponse = action.responseToState;
             return {
                 ...state,
             }

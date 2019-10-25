@@ -5,7 +5,7 @@ import { AuthorsBooksModel } from '../../shared/model/authorBook.model';
 import { NavigationScreenProp, NavigationState, NavigationParams, ScrollView } from 'react-navigation';
 import { connect } from 'react-redux';
 import * as userActions from '../../redux/actions/books.actions';
-import { ProfileReducerState } from 'src/app/shared/model';
+import { BooksReducerState } from 'src/app/shared/model';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -19,7 +19,7 @@ interface State {
 }
 
 interface mapStateToPropsModel {
-  profileReducer: ProfileReducerState;
+  booksReducer: BooksReducerState;
 }
 
 class HomeScreen extends Component<Props, State> {
@@ -95,7 +95,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: mapStateToPropsModel ) => {
   return {
-    bookResponseToState: state.profileReducer.booksResponse
+    bookResponseToState: state.booksReducer.booksResponse
   }
 };
 

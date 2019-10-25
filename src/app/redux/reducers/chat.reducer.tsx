@@ -1,5 +1,5 @@
 import { ChatActionsEnum } from "../../shared/enums";
-import { ChatReducerState } from "src/app/shared/model";
+import { ChatReducerState } from "../../../app/shared/model";
 
 const INIT_STATE: ChatReducerState = {
     renderedChatMessages: [
@@ -129,8 +129,6 @@ const INIT_STATE: ChatReducerState = {
 }
 
 export default function chatReducer(state = INIT_STATE, action: any) {
-    // console.log(action);
-    console.log(action.type, state.unResolvedPromises);
         switch (action.type) {
             case ChatActionsEnum.SEND_MESSAGE_REQUEST:
                     let flag = false;
@@ -161,7 +159,7 @@ export default function chatReducer(state = INIT_STATE, action: any) {
                     error: action.error,
                     ...state,
                 }
-            case ChatActionsEnum.CLEAR_STATE:
+            case ChatActionsEnum.CLEAR_UNRECEIVED_MESSAGE_STATE:
                     state.unResolvedPromises = [];
                     return {
                         ...state,
