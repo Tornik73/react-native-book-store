@@ -1,25 +1,24 @@
 import { BooksActionEnum } from "../../../app/shared/enums";
 import { takeEvery, all, fork, call, put } from "@redux-saga/core/effects";
 import { BookService } from "../../../app/services";
-import { getAllBooksSuccess } from "../actions/books.actions";
-import { AuthorsBooksModel } from "src/app/shared/model";
+import { getAllBooksSuccess, getAllBooksFailed } from "../actions/books.actions";
+import { GetAllBooksSuccess, GetAllBooksError } from "src/app/shared/model";
 
 function* handleBooksRequest() {
 
     try {
-        const response: AuthorsBooksModel = yield call(BookService.getAllBooks);
-        yield put(getAllBooksSuccess(response)); // TODO!!!!
-        // if((response as BooksError).error){
-        //     yield put(book((response as BooksSuccess).error));
-        // } else {
-        //     yield put(loginSuccess());
-        // }
+        const response: GetAllBooksSuccess | GetAllBooksError = yield call(BookService.getAllBooks);
+        if((response as GetAllBooksError).error){
+            yield put(getAllBooksFailed((response as GetAllBooksError)));
+        } else {
+            yield put(getAllBooksSuccess((response as GetAllBooksSuccess).data));
+        }
     } catch(err) {
-        // if (err instanceof Error) {
-        //     yield put(loginFailed(err.stack!));
-        // } else {
-        //     yield put(loginFailed('An unknown error occured.'));
-        // }
+        if (err instanceof Error) {
+            yield put(getAllBooksFailed({error: false, message: err.stack}));
+        } else {
+            yield put(getAllBooksFailed({error: false, message: 'An unknown error occured.'}));
+        }
     }
 }
 

@@ -50,7 +50,7 @@ class ChatScreen extends Component<Props, State> {
         this.oldDate = '';
         this.state = {
             refresh: false,
-            sendingMessage: false,
+            sendingMessage: true,
             renderMessages: []
         };
     }

@@ -53,7 +53,6 @@ class Base64Component extends Component<Props, State>{
 
         return (
             <View>  
-
                 <View style={style.inputContainer}>
                     <TextInput onChangeText={(text) => this.setState({encodeText: text})} placeholder="Encode String to base64"/>         
                     <Button title={'Submit'} onPress={() => this.encodeStringToBase64(this.state.encodeText)}></Button>

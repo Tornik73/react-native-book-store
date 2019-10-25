@@ -34,5 +34,5 @@ LoginRequestAction |
 LoginFailedAction  | 
 LoadingStart       |
 LoadingEnd         |
-LogoutAction ;
+LogoutAction;
 

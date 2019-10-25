@@ -1,20 +1,21 @@
 import { BooksActionEnum } from "../../shared/enums";
-import { AuthorsBooksModel } from "../../shared/model/";
+import { AuthorsBooksModel, GetAllBooksError } from "../../shared/model/";
+import { BooksActionTypes } from "src/app/shared/model/books/books-action.model";
 
-export function getAllBooks() {
+export function getAllBooks(): BooksActionTypes {
   return {
       type: BooksActionEnum.GET_ALL_BOOKS_REQUEST
   }
 }
 
-export function getAllBooksSuccess(authorsBooks: AuthorsBooksModel) {
+export function getAllBooksSuccess(authorsBooks: AuthorsBooksModel): BooksActionTypes {
     return {
-        responseToState: authorsBooks,
+        response: authorsBooks,
         type: BooksActionEnum.GET_ALL_BOOKS_SUCCESS,
     }
 }
 
-export function getAllBooksFailed(getAllBooksFailedError: any) {
+export function getAllBooksFailed(getAllBooksFailedError: GetAllBooksError): BooksActionTypes {
     return {
         error: getAllBooksFailedError,
         type: BooksActionEnum.GET_ALL_BOOKS_FAILED,
