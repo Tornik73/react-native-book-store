@@ -10,7 +10,7 @@ export function sendMessage(sendedMessage: SendedChatMessage) {
 }
 export function sendMessageSuccess(response: SendedChatMessage) {
     return {
-        ...response,
+        receivedMessage: response,
         type: ChatActionsEnum.SEND_MESSAGE_SUCCESS,
     }
 }
@@ -18,7 +18,7 @@ export function sendMessageSuccess(response: SendedChatMessage) {
 export function sendMessageFailed(err: any = null, sendedMessage: SendedChatMessage) {
     return {
         sendedMessage: sendedMessage,
-        ...err,
+        error: err,
         type: ChatActionsEnum.SEND_MESSAGE_FAILED,
     }
 }

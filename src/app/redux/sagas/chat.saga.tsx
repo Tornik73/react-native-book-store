@@ -5,8 +5,10 @@ import { sendMessageSuccess, sendMessageFailed } from "../actions/chat.actions";
 import { ChatService } from "../../../app/services";
 
 export function* handleChatRequest(sendedMessage: SendedChatMessage) {
+
     try {
         const response: ChatMessageResponse = yield call(ChatService.sendMessage, sendedMessage);
+
         if(response.success){
             sendedMessage.id = response.messageId;
             yield put(sendMessageSuccess(sendedMessage));
@@ -22,6 +24,7 @@ export function* handleChatRequest(sendedMessage: SendedChatMessage) {
         }
     }
 }
+
 
 function* watchLoginReqest() {
     yield takeEvery(ChatActionsEnum.SEND_MESSAGE_REQUEST, handleChatRequest);

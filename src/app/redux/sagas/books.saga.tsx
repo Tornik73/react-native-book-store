@@ -1,9 +1,6 @@
-import { AuthActionEnum, UserActionsEnum } from "../../../app/shared/enums";
-import LoginRequestSagaModel from "../../../app/shared/model/auth/auth-saga.model";
+import { UserActionsEnum } from "../../../app/shared/enums";
 import { takeEvery, all, fork, call, put } from "@redux-saga/core/effects";
-import { AccountService, BookService } from "../../../app/services";
-import { loginFailed, loginSuccess } from "../actions/auth.actions";
-import { LoginError, LoginSuccess } from "src/app/shared/model/auth/login.model";
+import { BookService } from "../../../app/services";
 import { getAllBooksSuccess } from "../actions/books.actions";
 import { AuthorsBooksModel } from "src/app/shared/model";
 

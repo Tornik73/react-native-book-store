@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { AuthorsBooksModel } from '../shared/model';
 import { environment } from '../environments/environment';

@@ -16,11 +16,13 @@ interface Props {
     postMessage: (sendedChatMessage: SendedChatMessage) => ChatMessageModel;
     clearState: () => void;
     unRecievedMessages: ChatMessageModel[];
+    renderedChatMessages: ChatMessageModel[];
 }
 
 interface State {
     sendingMessage: boolean;
     renderMessages: ChatMessageModel[];
+    refresh: boolean;
 }
 
 interface mapStateToPropsModel {
@@ -47,129 +49,9 @@ class ChatScreen extends Component<Props, State> {
         super(props);
         this.oldDate = '';
         this.state = {
+            refresh: false,
             sendingMessage: false,
-            renderMessages: [
-                {
-                    id: 1,
-                    uuid: null,
-                    name: 'Alberto Raya',
-                    messageText: 'Hi, how are you guys?',
-                    time: '2:16PM',
-                    isRead: true,
-                    isReceived: true,
-                    date: '05.08.2018',
-                }, 
-                {
-                    id: 2,
-                    uuid: null,
-                    name: 'Dameon Peterson',
-                    messageText: 'I’m doing great! Working hard on the TeamUp app',
-                    time: '2:16PM',
-                    isRead: true,
-                    isReceived: true,
-                    date: '05.08.2018'
-                }, 
-                {
-                    id: 3,
-                    uuid: null,
-                    name: 'Alberto Raya',
-                    messageText: 'Hi, how are you guys?',
-                    time: '2:16PM',
-                    isRead: true,
-                    isReceived: true,
-                    date: '05.08.2018'
-                },
-                {
-                    id: 4,
-                    uuid: null,
-                    name: 'LoginName',
-                    messageText: 'It’s not finished yet?',
-                    time: '2:16PM',
-                    isRead: true,
-                    isReceived: true,
-                    date: '05.08.2018'
-                },
-                {
-                    id: 5,
-                    uuid: null,
-                    name: 'Darren Adams',
-                    messageText: 'I’m doing great! Working hard on the TeamUp app',
-                    time: '2:16PM',
-                    isRead: true,
-                    isReceived: true,
-                    date: '06.08.2018'
-                },
-                {
-                    id: 6,
-                    uuid: null,
-                    name: 'Seri Anand',
-                    messageText: 'I’m doing great! Working hard on the TeamUp app',
-                    time: '2:16PM',
-                    isRead: true,
-                    isReceived: true,
-                    date: '06.08.2018'
-                },
-                {
-                    id: 7,
-                    uuid: null,
-                    name: 'Cha Ji-Hun',
-                    messageText: 'Hi, how are you guys?',
-                    time: '2:16PM',
-                    isRead: true,
-                    isReceived: true,
-                    date: '06.08.2018'
-                },
-                {
-                    id: 8,
-                    uuid: null,
-                    name: 'LoginName',
-                    messageText: 'It’s not finished yet?',
-                    time: '2:16PM',
-                    isRead: true,
-                    isReceived: true,
-                    date: '06.08.2018'
-                },
-                {
-                    id: 9,
-                    uuid: null,
-                    name: 'LoginName',
-                    messageText: 'It’s not finished yet?',
-                    time: '2:16PM',
-                    isRead: true,
-                    isReceived: true,
-                    date: '06.08.2018'
-                },
-                {
-                    id: 10,
-                    uuid: null,
-                    name: 'LoginName',
-                    messageText: 'It’s not finished yet?',
-                    time: '2:17PM',
-                    isRead: true,
-                    isReceived: true,
-                    date: '07.08.2018'
-                },
-                {
-                    id: 11,
-                    uuid: null,
-                    name: 'LoginName',
-                    messageText: 'It’s not finished yet?',
-                    time: '2:18PM',
-                    isRead: true,
-                    isReceived: true,
-                    date: '07.08.2018'
-                },
-                {
-                    id: 12,
-                    uuid: null,
-                    name: 'LoginName',
-                    messageText: 'It’s not finished yet?',
-                    time: '2:25PM',
-                    isRead: true,
-                    isReceived: true,
-                    date: '08.08.2018'
-                },
-            ]
+            renderMessages: []
         };
     }
 
@@ -177,57 +59,26 @@ class ChatScreen extends Component<Props, State> {
         this.subscribeToNetworkState();
         //TODO: this.unSubscribeFromNetworkState();
     }
-
-    private pushMessageToState = (message:  SendedChatMessage, id: number | null = null): void => {
-        this.setState((state: State): State => {
-            const renderMessages = [...state.renderMessages];
-            message.id = id;
-            renderMessages.push({...message});
-            return {
-                renderMessages,
-                sendingMessage: state.sendingMessage
-            };
-        });
-    }
-
-    private changeMessageStatusToRecievedByUUID = (id: number, uuid: string | null = null): void => {
-
-        setTimeout(()=> { // TODO: REMOVE 
-            this.scroll.props.scrollToEnd(true);
-            this.setState((state: State): State => {
-                const renderMessages = [...state.renderMessages];
-                renderMessages.forEach(item => {
-
-                    if(item.uuid === uuid){
-                        item.id = id;
-                        item.isReceived = true;
-                    }
-                })
-                return {
-                    renderMessages,
-                    sendingMessage: state.sendingMessage
-                };
-
-            });
-
-        }, 1000);
-    }
-
-    private postMessage = (chatMessage: SendedChatMessage) :void => {
-        const response = this.props.postMessage(chatMessage);
-
-        this.changeMessageStatusToRecievedByUUID(response.id, response.uuid);
-
-    }
-
     private sendMessage = (): void => {
 
         // Change status when message will recieved
         UUIDGenerator.getRandomUUID((uuid) => {
             chatMessage.uuid = uuid;
-            this.pushMessageToState(chatMessage);
-            this.postMessage(chatMessage);
+            chatMessage.messageText = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            // this.pushMessageToState(chatMessage);
+            this.props.postMessage(chatMessage);
         });
+        this.setState({ 
+            refresh: !this.state.refresh
+        });
+
+        //TODO: scroll to end need to be async
+        setTimeout(() => {
+            this.scroll.props.scrollToEnd(true);
+            this.setState({ 
+                refresh: !this.state.refresh
+            });
+        }, 200)
 
         // Change status when message will read
     }
@@ -240,9 +91,12 @@ class ChatScreen extends Component<Props, State> {
             if(state.isConnected){
                 if(this.props.unRecievedMessages.length > 0){
                     this.props.unRecievedMessages.forEach(item => {
-                            this.postMessage(item);
-                    })
-                    this.props.clearState();
+                            this.props.postMessage(item);
+                    });
+                    this.setState({ 
+                        refresh: !this.state.refresh
+                    });
+                    // BUG: On 1 more messages in unRecievedMessages
                 }
             }
         });
@@ -259,7 +113,8 @@ class ChatScreen extends Component<Props, State> {
                 <ScrollView >
                     <FlatList
                         horizontal={false}
-                        data={this.state.renderMessages}
+                        data={this.props.renderedChatMessages}
+                        extraData={this.state.refresh}
                         renderItem={(item) => this.renderChatMessage(item.item, item.index)}
                     >
                     </FlatList>
@@ -372,6 +227,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: mapStateToPropsModel) => {
     return {
+        renderedChatMessages: state.chatReducer.renderedChatMessages,
         unRecievedMessages: state.chatReducer.unResolvedPromises,
     }
 };

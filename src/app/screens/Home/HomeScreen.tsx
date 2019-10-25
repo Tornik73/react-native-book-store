@@ -35,11 +35,10 @@ class HomeScreen extends Component<Props, State> {
 
   public getAllBooks(): void {
 
-    this.setState({
-      refreshing: true
-    })
+    this.setState({refreshing: true});
 
     this.props.getAllBooks();
+
     this.setState({
         refreshing: false,
         data: this.props.bookResponseToState,
@@ -63,7 +62,7 @@ class HomeScreen extends Component<Props, State> {
 
   private renderData() { 
 
-    const book: AuthorsBooksModel[] = this.state.data; //TODO: Remove this line
+    const book: AuthorsBooksModel[] = this.props.bookResponseToState;
     return( 
           <FlatList
             data={book}
