@@ -5,7 +5,8 @@ import { AuthorsBooksModel } from '../../shared/model/authorBook.model';
 import { NavigationScreenProp, NavigationState, NavigationParams, ScrollView } from 'react-navigation';
 import { connect } from 'react-redux';
 import * as userActions from '../../redux/actions/books.actions';
-import { BooksReducerState } from 'src/app/shared/model';
+import { BooksReducerState, TranslationsModel } from '../../../app/shared/model';
+import en from '../../../app/shared/translations/en';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -23,7 +24,8 @@ interface mapStateToPropsModel {
 }
 
 class HomeScreen extends Component<Props, State> {
-
+  private pageText: TranslationsModel = en;
+  
   constructor(props: Props){
     super(props);
     this.state = {
@@ -74,6 +76,7 @@ class HomeScreen extends Component<Props, State> {
 
   public render() {
     return(
+
           <ScrollView
             refreshControl={
               <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.getAllBooks()} />

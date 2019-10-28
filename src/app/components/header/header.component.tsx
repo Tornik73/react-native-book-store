@@ -3,23 +3,24 @@ import { View, Image, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import style from "./style";
 import { NavigationActions } from "react-navigation";
+import { HeaderItemsEnum } from "../../../app/shared/enums/header-items.enum";
 
 interface Props {
     title?: string;
-    viewType?: 'setting' | 'edit' | 'options-send' | 'onlytitle' | 'backtitle'
+    viewType?: 'Settings' | 'edit' | 'options-send' | 'onlytitle' | 'backtitle';
 }
 interface State {
-    title: string;
-    showBackButton: boolean;
-    showEditButton: boolean;
-    showSettingButton: boolean;
-    showOptionsButton: boolean;
+    // title: string;
+    // showBackButton: boolean;
+    // showEditButton: boolean;
+    // showSettingButton: boolean;
+    // showOptionsButton: boolean;
 }
 
-export class HomeHeaderComponent extends Component/*<Props, State>*/ {
+export class HomeHeaderComponent extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.state = getStateByProps(props);
+        // this.state = getStateByProps(props);
     }
 
     render() {
@@ -33,7 +34,7 @@ export class HomeHeaderComponent extends Component/*<Props, State>*/ {
                                 <Image style={style.back} source={require('../../../assets/img/png/header/back.png')}></Image>
                             </View>
                         </TouchableOpacity>
-                        : <TouchableOpacity onPress={() => navigation.dispatch(NavigationActions.navigate({routeName: 'Chat',}))}>
+                        : <TouchableOpacity onPress={() => navigation.dispatch(NavigationActions.navigate({routeName: HeaderItemsEnum.CHAT,}))}>
                             <View style={style.backWrapper}>
                                 <Image style={style.back} source={require('../../../assets/img/png/chat/chat.png')}></Image>
                             </View>
@@ -43,19 +44,21 @@ export class HomeHeaderComponent extends Component/*<Props, State>*/ {
                     <Text style={style.title}>{'BookStore'}</Text>
                 </View>
                 <View style={style.settingsWrapper}>
-                    <Image style={style.settings} source={require('../../../assets/img/png/header/settings.png')}></Image>
+                    <TouchableOpacity onPress={() => navigation.dispatch(NavigationActions.navigate({routeName: HeaderItemsEnum.SETTINGS,}))}>
+                        <Image style={style.settings} source={require('../../../assets/img/png/header/settings.png')}></Image>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
     }
 }
 
-const getStateByProps = (props: Props): State => {
-    return {
-        title: props.title || "TeamUp",
-        showBackButton: props.viewType != 'onlytitle',
-        showEditButton: props.viewType == 'edit',
-        showOptionsButton: props.viewType == 'options-send',
-        showSettingButton: props.viewType == 'setting'
-    }
-}
+// const getStateByProps = (props: Props): State => {
+//     return {
+//         title: props.title || "BookStore",
+//         showBackButton: props.viewType != 'onlytitle',
+//         showEditButton: props.viewType == 'edit',
+//         showOptionsButton: props.viewType == 'options-send',
+//         showSettingButton: props.viewType == 'Settings'
+//     }
+// }

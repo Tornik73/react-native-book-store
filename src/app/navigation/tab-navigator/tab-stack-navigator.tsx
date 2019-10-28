@@ -4,8 +4,8 @@ import { createAppContainer } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { FooterItemsEnum } from "../../../app/shared/enums";
 import ProfileScreen from "../../screens/Profile/profile.screen";
-import LoginScreen from "../../screens/Login/loginScreen";
-import CartScreen from "../../screens/Cart/CartScreen";
+import LoginScreen from "../../screens/Login/login.screen";
+import CartScreen from "../../screens/Cart/cart.screen";
 import FooterComponent from "../../components/home/footer/FooterScreen";
 import { HomeStack } from "../home-navigator/home-stack-navigator";
 

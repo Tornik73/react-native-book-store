@@ -6,7 +6,8 @@ import style from "./style";
 import { connect } from "react-redux";
 import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation";
 import { MenuItemModel, AuthReducerState, ProfileReducerState } from "../../../shared/model/";
-import * as loginActions from "../../../redux/actions/auth.actions";
+import * as RNLocalize from "react-native-localize";
+import I18t from '../../../shared/translations/';
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -16,14 +17,15 @@ interface Props {
     isLoading: boolean,
 }
 interface State {
-    menu: MenuItemModel[];
+    menu: any[];
 }
 
 interface mapStateToPropsModel {
     authReducer: AuthReducerState;
     profileReducer: ProfileReducerState;
 }
-  
+
+
 
 class FooterComponent extends Component<Props, State>{
 
@@ -39,6 +41,12 @@ class FooterComponent extends Component<Props, State>{
         }
     }
     
+    componentDidMount() {
+        RNLocalize.addEventListener("change", () => {
+            console.log(RNLocalize.getLocales());
+        });
+    }
+
     render() {
         return (
             <View style={style.container}> 
@@ -49,31 +57,34 @@ class FooterComponent extends Component<Props, State>{
   
     getMenuView(item: MenuItemModel){
         const {navigation} = this.props as any;
+        let name = I18t.t(item.name);
         if (this.props.isLogined && !this.props.isLoading){
             if(navigation.isFocused(item.name)){
+
                 if(item.name === FooterItemsEnum.PROFILE){
 
                     return (
                         <View style={style.item}>
                             <Image style={style.itemImage} source={{uri: this.props.profileImg}} ></Image>
-                            <Text style={[style.itemTitle, style.itemTitleSelected]}>{item.name}</Text>
+                            <Text style={[style.itemTitle, style.itemTitleSelected]}>{name}</Text>
                             <View style={style.selectedSeparator}></View>
                         </View>)
                 }
                 return (
                         <View style={style.item}>
                             <Image style={style.itemImage} source={{uri: item.img}}></Image>
-                            <Text style={[style.itemTitle, style.itemTitleSelected]}>{item.name}</Text>
+                            <Text style={[style.itemTitle, style.itemTitleSelected]}>{name}</Text>
                             <View style={style.selectedSeparator}></View>
                         </View>)
             }
             if(item.name === FooterItemsEnum.PROFILE){
+
                 return (
                     <TouchableOpacity onPress={async() => { 
                         navigation.navigate(item.name);
                         }} style={style.item}>
                         <Image style={style.itemImage} source={{uri: this.props.profileImg}}></Image>
-                        <Text style={[style.itemTitle]}>{item.name}</Text> 
+                        <Text style={[style.itemTitle]}>{name}</Text> 
                         <View style={[style.selectedSeparator, style.notVisible]}></View>
                     </TouchableOpacity>)
             }
@@ -82,7 +93,7 @@ class FooterComponent extends Component<Props, State>{
                     navigation.navigate(item.name);
                     }} style={style.item}>
                     <Image style={style.itemImage} source={{uri: item.img}}></Image>
-                    <Text style={[style.itemTitle]}>{item.name}</Text> 
+                    <Text style={[style.itemTitle]}>{name}</Text> 
                     <View style={[style.selectedSeparator, style.notVisible]}></View>
                 </TouchableOpacity>)
            

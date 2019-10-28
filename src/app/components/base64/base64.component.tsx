@@ -2,6 +2,9 @@ import { Component } from "react";
 import React from "react";
 import { View, Text, TextInput, Button, Platform, NativeModules } from "react-native";
 import style from "./style"; 
+import { TranslationsModel } from "../../../app/shared/model";
+import en from '../../shared/translations/en';
+import I18t from '../../shared/translations/';
 
 interface Props {}
 interface State {
@@ -11,7 +14,7 @@ interface State {
     decodedText: string;
 }
 class Base64Component extends Component<Props, State>{
-
+    private pageText: TranslationsModel = en;
     constructor(props: Props){
         super(props);
         this.state ={ 
@@ -56,11 +59,11 @@ class Base64Component extends Component<Props, State>{
             <View>  
                 <View style={style.inputContainer}>
                     <TextInput onChangeText={(text) => this.setState({encodeText: text})} placeholder="Encode String to base64"/>         
-                    <Button title={'Submit'} onPress={() => this.encodeStringToBase64(this.state.encodeText)}></Button>
+                    <Button title={I18t.t(this.pageText.Submit)} onPress={() => this.encodeStringToBase64(this.state.encodeText)}></Button>
                 </View>
                 <View style={style.inputContainer}>
                     <TextInput onChangeText={(text) => this.setState({decodeText: text})} placeholder="Decode String from base64"/>
-                    <Button title={'Submit'} onPress={() => this.decodeStringFromBase64(this.state.decodeText)}></Button>
+                    <Button title={I18t.t(this.pageText.Submit)} onPress={() => this.decodeStringFromBase64(this.state.decodeText)}></Button>
                 </View>
                 <View>
                     <Text>Encoded Text: {this.state.encodedText}</Text>

@@ -48,7 +48,6 @@ const subscribeUser = (creditCardToken) => {
   });
 };
 
-
 const createCreditCardToken = (creditCardData) => {
   const card = {
       'card[number]': creditCardData.values.number.replace(/ /g, ''),
@@ -78,7 +77,6 @@ interface State {
   error: null | any;
  }
 
-interface mapStateToPropsModel {}
 
 class CartScreen extends Component<Props, State> {
 
@@ -111,9 +109,7 @@ class CartScreen extends Component<Props, State> {
   }
   onSubmit = async (creditCardInput) => {
 
-    const {
-      navigation
-    } = this.props;
+    const { navigation } = this.props;
     this.setState({
       submitted: true
     });
@@ -134,9 +130,7 @@ class CartScreen extends Component<Props, State> {
       });
       return;
     }
-    const {
-      error
-    } = await subscribeUser(creditCardToken);
+    const { error } = await subscribeUser(creditCardToken);
     if (error) {
       this.setState({
         submitted: false,
@@ -156,7 +150,6 @@ class CartScreen extends Component<Props, State> {
     return( 
       <View style={styles.container}>
         <Button title={'PayPal'} onPress={() => {this.payWithPayPal()}}></Button>
-        {/* <Button color={'red'} title={'Stripe'} onPress={() => {this.payWithStripe()}}></Button> */}
         <AddSubscriptionView
           error={error}
           submitted={submitted} 

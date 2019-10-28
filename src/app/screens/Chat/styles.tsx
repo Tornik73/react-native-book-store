@@ -1,4 +1,7 @@
 import { StyleSheet } from 'react-native';
+import * as RNLocalize from "react-native-localize";
+
+const isRTL = RNLocalize.getLocales()[0];
 
 export default StyleSheet.create({
     container: {
@@ -32,17 +35,21 @@ export default StyleSheet.create({
     chatMessage: {
         display: 'flex',
         flexDirection: 'column',
+        textAlign: isRTL ? 'left' : 'right',
     },
     messageItemName: {
         color: 'rgb(168, 173, 180)',
         fontSize: 12,
+        textAlign: isRTL ? 'left' : 'right',
     },
     messageItemText: {
+        textAlign: isRTL ? 'left' : 'right',
         color: 'rgb(62, 74, 89)',
         width: '80%',
         fontSize: 16,
     },
     messageItemTime: {
+        textAlign: isRTL ? 'left' : 'right',
         display: 'flex',
         marginLeft: 'auto',
         color: 'rgb(185, 189, 195)',
@@ -50,13 +57,14 @@ export default StyleSheet.create({
         marginRight: 6
     },
     sentMessageItemText: {
+        textAlign: isRTL ? 'left' : 'right',
         color: 'white',
         fontSize: 16,
     },
     sentMessageStatus: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: isRTL ? 'flex-start' : 'flex-end',
     },
     sentMessageStatusImg: {
         width: 14,
@@ -110,6 +118,7 @@ export default StyleSheet.create({
         paddingBottom: 8,
         fontSize: 16,
         width: '100%',
+        textAlign: 'right'
     },
     sendMessage: {
         width: 46,
@@ -192,6 +201,7 @@ export default StyleSheet.create({
         height: 4,
     },
     arrowLeft: {
+
         marginTop: 9,
         width: 0,
         height: 0,
@@ -207,6 +217,7 @@ export default StyleSheet.create({
         borderLeftColor: 'transparent',
     },
     receivedMessageArrow: {
+
         display: 'flex',
         flexDirection:'row',
     },
@@ -216,6 +227,7 @@ export default StyleSheet.create({
         marginBottom: 10
     },  
     sentMessageArrow: {
+
         display: 'flex',
         flexDirection:'row',
         justifyContent: 'flex-end'

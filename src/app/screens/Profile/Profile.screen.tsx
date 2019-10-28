@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import { NavigationScreenProp, NavigationState, NavigationParams, ScrollView } from 'react-navigation';
 import * as loginActions from "../../redux/actions/auth.actions";
 import * as profileActions from "../../redux/actions/profile.actions";
-import { UserModel, AuthReducerState, ProfileReducerState } from 'src/app/shared/model';
+import { UserModel, AuthReducerState, ProfileReducerState, TranslationsModel } from 'src/app/shared/model';
 import { environment } from '../../environments/environment';
 import ImagePicker from 'react-native-image-picker';
-import Base64Component from '../../components/base64/base64.component';
-
+import I18t from '../../shared/translations/';
+import en from '../../shared/translations/en';
 const RNGRP = require('react-native-get-real-path');
 const RNFS = require('react-native-fs');
 
@@ -37,7 +37,7 @@ interface mapStateToPropsModel {
 }
 
 class ProfileScreen extends Component<Props, State> {
-  
+  private pageText: TranslationsModel = en;
   constructor(props: Props) {
     super(props);
     this.state = { 
@@ -113,16 +113,16 @@ class ProfileScreen extends Component<Props, State> {
           {this.state.editMode &&
            <View style={styles.choosePhoto}>
               <View style={styles.saveButton}>
-                <Button title={'Save'} color='#4CAF50' onPress={() => this.saveImage()}/>     
+                <Button title={I18t.t(this.pageText.Save)} color='#4CAF50' onPress={() => this.saveImage()}/>     
               </View>
               <View>
-                <Button title={'Cancel'}  color='#f44336' onPress={() => this.cancelSavingImage()}/>     
+                <Button title={I18t.t(this.pageText.Cancel)}  color='#f44336' onPress={() => this.cancelSavingImage()}/>     
               </View>
            </View>    
             }
             {!this.state.editMode &&
               <View  style={styles.choosePhoto}>
-                <Button title={'Choose photo'} onPress={this.handleChoosePhoto}/>
+                <Button title={I18t.t(this.pageText["Choose photo"])} onPress={this.handleChoosePhoto}/>
               </View>
             }
         </View>
@@ -133,9 +133,9 @@ class ProfileScreen extends Component<Props, State> {
               <Text style={styles.description}>Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum electram expetendis, omittam deseruisse consequuntur ius an,</Text>
                 
               <TouchableOpacity style={styles.buttonContainer} onPress={() => logout()}>
-                <Text>Log out</Text>  
+                <Text>{I18t.t(this.pageText["Log out"])}</Text>  
               </TouchableOpacity>    
-              <Base64Component />
+              {/* <Base64Component /> */}
           </View>
         </View>
       </ScrollView>
