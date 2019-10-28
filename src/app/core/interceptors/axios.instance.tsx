@@ -11,7 +11,7 @@ const AxiosInstance = axios.create({
 })
 
 AxiosInstance.interceptors.request.use(async (config) => {
-    let token: string | null = await AsyncStorage.getItem(AsyncStorageEnum.TOKEN).then(token => token);
+    const token: string | null = await AsyncStorage.getItem(AsyncStorageEnum.TOKEN).then(token => token);
     if (token) {
         config.headers[AsyncStorageEnum.TOKEN] = token;
     } else {

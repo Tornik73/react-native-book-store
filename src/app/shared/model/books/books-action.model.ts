@@ -7,16 +7,13 @@ interface GetBooksRequestAction {
 }
 
 interface GetBooksSuccessAction {
-    response: AuthorsBooksModel;
     type: typeof BooksActionEnum.GET_ALL_BOOKS_SUCCESS;
+    response: AuthorsBooksModel[];
 }
 
 interface GetBooksFailedAction {
-    error: GetAllBooksError;
     type: typeof BooksActionEnum.GET_ALL_BOOKS_FAILED;
+    error: GetAllBooksError;
 }
 
-export type BooksActionTypes = 
-GetBooksRequestAction |
-GetBooksSuccessAction | 
-GetBooksFailedAction;
+export type BooksActionTypes =GetBooksSuccessAction | GetBooksRequestAction  | GetBooksFailedAction;

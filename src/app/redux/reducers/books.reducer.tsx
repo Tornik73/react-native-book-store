@@ -1,6 +1,7 @@
-import { BooksActionEnum } from '../../shared/enums/'
-import { BooksReducerState } from '../../../app/shared/model';
-import { BooksActionTypes } from 'src/app/shared/model/books/books-action.model';
+import { BooksActionEnum } from "../../shared/enums/"
+import { BooksActionTypes } from "../../shared/model/books/books-action.model";
+import { BooksReducerState } from "../../shared/model/books/books-reducer-state.model"
+
 
 const INIT_STATE: BooksReducerState = {
     booksResponse: []
@@ -13,12 +14,11 @@ export default function booksReducer(state = INIT_STATE, action: BooksActionType
             return {
                 ...state,
             }
-        case BooksActionEnum.GET_ALL_BOOKS_FAILED: {
+        case BooksActionEnum.GET_ALL_BOOKS_SUCCESS: 
             state.booksResponse = action.response;
             return {
                 ...state,
             }
-        }
 
         case BooksActionEnum.GET_ALL_BOOKS_FAILED:
             return {
