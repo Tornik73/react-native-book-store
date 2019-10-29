@@ -8,7 +8,7 @@ export function getAllBooks(): BooksActionTypes {
   }
 }
 
-export function getAllBooksSuccess(authorsBooks: AuthorsBooksModel): BooksActionTypes {
+export function getAllBooksSuccess(authorsBooks: AuthorsBooksModel[]): BooksActionTypes {
     return {
         response: authorsBooks,
         type: BooksActionEnum.GET_ALL_BOOKS_SUCCESS,

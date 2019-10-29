@@ -86,16 +86,14 @@ class ChatScreen extends Component<Props, State> {
             if(!state.isConnected){
                 ToastAndroid.show('Connection to the server is lost!', ToastAndroid.SHORT);
             } 
-            if(state.isConnected){
-                if(this.props.unRecievedMessages.length > 0){
-                    this.props.unRecievedMessages.forEach(item => {
-                            this.props.postMessage(item);
-                    });
-                    this.setState({ 
-                        refresh: !this.state.refresh
-                    });
+            if(state.isConnected && this.props.unRecievedMessages.length > 0){
+                this.props.unRecievedMessages.forEach(item => {
+                    this.props.postMessage(item);
+                });
+                this.setState({ 
+                    refresh: !this.state.refresh
+                });
                     // BUG: On 1 more messages in unRecievedMessages
-                }
             }
         });
     }
@@ -134,7 +132,7 @@ class ChatScreen extends Component<Props, State> {
                     <TouchableOpacity>
                         <Image style={styles.voiceImg} source={require('../../../assets/img/png/chat/voice.png')}></Image>
                     </TouchableOpacity> 
-                    <TextInput style={styles.input} placeholderTextColor = 'rgb(62, 74, 89)' placeholder={"עגלה"}>
+                    <TextInput style={styles.input} placeholderTextColor = 'rgb(62, 74, 89)' placeholder={"Input your message..."}>
                     </TextInput>
                 </View>
                 <TouchableOpacity onPress={() => {this.sendMessage()}}>

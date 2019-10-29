@@ -4,10 +4,11 @@ import { View, Text, FlatList, SafeAreaView, ActivityIndicator, RefreshControl, 
 import { AuthorsBooksModel } from '../../shared/model/authorBook.model';
 import { NavigationScreenProp, NavigationState, NavigationParams, ScrollView } from 'react-navigation';
 import { connect } from 'react-redux';
-import * as userActions from '../../redux/actions/books.actions';
-import { BooksReducerState, TranslationsModel } from '../../../app/shared/model';
-import en from '../../../app/shared/translations/en';
+import * as booksActions from '../../redux/actions/books.actions';
+import { BooksReducerState, TranslationsModel, Book, Author } from '../../../app/shared/model';
+import Database from '../../database/Database';
 
+const db = new Database();
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   getAllBooks: () => void;
@@ -17,6 +18,9 @@ interface Props {
 interface State { 
   refreshing: boolean
   data: AuthorsBooksModel[];
+
+
+  products: [],
 }
 
 interface mapStateToPropsModel {
@@ -24,13 +28,13 @@ interface mapStateToPropsModel {
 }
 
 class HomeScreen extends Component<Props, State> {
-  private pageText: TranslationsModel = en;
   
   constructor(props: Props){
     super(props);
     this.state = {
       refreshing: false,
       data: [],
+      products: [],
 
     };
   }
@@ -48,14 +52,26 @@ class HomeScreen extends Component<Props, State> {
   }
 
   public componentDidMount(): void{
+    this._subscribe = this.props.navigation.addListener('didFocus', () => {
+      this.getProducts();
+    });
+    db.addProduct({prodId:21, prodName:'name', prodDesc:'desc', prodImage:'img', prodPrice: 123})
     this.getAllBooks();
   }
-
-  private Item = ({ bookItem }:any): JSX.Element => {
+  getProducts() {
+    let products = [];
+    db.listProduct().then((data) => {
+      products = data;
+      console.log(products, 'PRODUCTS');
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+  private Item = ( bookItem: Book, author: Author): JSX.Element => {
     return (
       <View style={styles.item}>
         <Text style={styles.title}>{bookItem.title}</Text>
-        <Text style={styles.text}>Author: {bookItem.author}</Text>
+        <Text style={styles.text}>Author: {author.name}</Text>
         <Text style={styles.text}>Description: {bookItem.description}</Text>
         <Text style={styles.text}>Price: {bookItem.price}</Text>
       </View>
@@ -68,7 +84,7 @@ class HomeScreen extends Component<Props, State> {
     return( 
           <FlatList
             data={book}
-            renderItem={({ item }) => <this.Item bookItem={item.book}  />}
+            renderItem={({ item }) => this.Item(item.book, item.author) }
             keyExtractor={item => item.bookId.toString()}
           />
     )
@@ -90,7 +106,7 @@ class HomeScreen extends Component<Props, State> {
   }
 }
 const mapDispatchToProps = {
-  getAllBooks: () => userActions.getAllBooks(),
+  getAllBooks: () => booksActions.getAllBooks(),
 };
 
 const mapStateToProps = (state: mapStateToPropsModel ) => {

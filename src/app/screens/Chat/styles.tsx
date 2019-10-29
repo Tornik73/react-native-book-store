@@ -64,7 +64,7 @@ export default StyleSheet.create({
     sentMessageStatus: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: isRTL ? 'flex-start' : 'flex-end',
+        justifyContent: 'flex-end',
     },
     sentMessageStatusImg: {
         width: 14,
@@ -115,10 +115,10 @@ export default StyleSheet.create({
     },
     input: {
         paddingTop: 8,
+        textAlign: isRTL ? 'left' : 'right',
         paddingBottom: 8,
         fontSize: 16,
         width: '100%',
-        textAlign: 'right'
     },
     sendMessage: {
         width: 46,
